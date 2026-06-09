@@ -20,23 +20,22 @@
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: #d8d2ca;
+    background: var(--bg);
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
   }
 
-  /* Phone frame */
+  /* Phone canvas — fills viewport on mobile, fixed size on desktop */
   .phone {
     position: relative;
-    width: 393px;
-    height: 852px;
+    width: 100vw;
+    height: 100vh;
     background: var(--bg);
-    border-radius: 44px;
     overflow: hidden;
-    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.4), 0 0 0 12px #111, 0 0 0 13px #2b2b2b;
+  }
+  @media (min-width: 768px) {
+    body { display: flex; align-items: center; justify-content: center; background: #d8d2ca; }
+    .phone { width: 393px; height: 852px; box-shadow: 0 30px 80px -30px rgba(0,0,0,0.25); }
   }
 
   /* Status bar */
