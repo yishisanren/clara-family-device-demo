@@ -924,6 +924,22 @@
     overflow: hidden;
   }
   .page.subpage.open { transform: translateX(0); pointer-events: auto; }
+  /* 整图还原页（看板4 吸奶器 / BBM）— 截图自带状态栏与导航栏，仅叠一个返回热区 */
+  .imgpage { background: #fff; }
+  .imgpage-scroll { position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .imgpage-shot { display: block; width: 100%; height: auto; }
+  .imgpage-back {
+    position: absolute; left: 8px; z-index: 5;
+    top: calc(env(safe-area-inset-top, 0px) + 54px);
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .imgpage-back:active { background: rgba(0,0,0,0.06); }
+  .imgpage-back svg { width: 22px; height: 22px; }
+  /* 桌面预览：状态栏 62px，返回按钮往下对齐截图里的导航箭头 */
+  @media (min-width: 768px) {
+    .imgpage-back { top: 64px; }
+  }
   .sub-nav {
     position: absolute; left: 0; right: 0; top: 0;
     height: calc(62px + 44px);
@@ -1803,95 +1819,24 @@
   </div>
 
   <!-- =============== PUMP PAGE (Figma 看板4 吸奶器 1:7794) =============== -->
-  <div class="page subpage pumppage" id="pumpPage">
-    <div class="glow"></div>
-    <div class="sub-nav">
-      <span class="back" data-close-sub>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
-      </span>
-      <h2>Breast Pump</h2>
-      <span class="gear">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      </span>
+  <!-- 看板4 吸奶器页面 — 整图还原（只读，仅返回） -->
+  <div class="page subpage imgpage" id="pumpPage">
+    <div class="imgpage-scroll">
+      <img class="imgpage-shot" src="board4-pump.png" alt="Breast Pump">
     </div>
+    <span class="imgpage-back" data-close-sub>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#3d0b08" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+    </span>
+  </div>
 
-    <div class="pp-scroll">
-      <!-- device row -->
-      <div class="pp-devrow">
-        <div>
-          <div class="dname">Kaka's M10
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
-          </div>
-          <span class="pp-conn">Connecting...</span>
-          <div class="pp-bats">
-            <span class="pp-batpill l"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#770523" stroke-width="1.6"><rect x="2" y="9" width="12" height="6" rx="1.5"/><path d="M8 5v4M6 7h4" /></svg></span>58%</span>
-            <span class="pp-batpill r"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.6"><rect x="2" y="9" width="12" height="6" rx="1.5"/></svg></span>58%</span>
-          </div>
-        </div>
-        <div class="pp-pumps">
-          <div class="one">
-            <img src="pump-device.png" alt="">
-            <span class="lab">L <span class="b"><i></i></span></span>
-          </div>
-          <div class="one">
-            <img src="pump-device.png" alt="">
-            <span class="lab">R <span class="b"><i></i></span></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Last pump card -->
-      <div class="pp-last">
-        <div class="k">Last Pump</div>
-        <div class="big">1h 45m ago</div>
-        <hr>
-        <div class="row">
-          <div class="col"><div class="k">Last Time</div><div class="v">09:35am</div></div>
-          <div class="col"><div class="k">Last Volume</div><div class="v">680ml</div></div>
-        </div>
-      </div>
-
-      <!-- Warm-Up toggle -->
-      <div class="pp-toggle">
-        <span class="lbl">Warm-Up Available
-          <svg class="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-        </span>
-        <span class="pp-sw" id="warmupSw"></span>
-      </div>
-
-      <!-- Manual Control -->
-      <div class="pp-manual">
-        <div class="hd">
-          <span class="ttl">Manual Control
-            <svg class="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:18px;height:18px;opacity:.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-          </span>
-          <span class="va">View all
-            <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1l6 6-6 6"/></svg>
-          </span>
-        </div>
-        <div class="pp-modes">
-          <div class="pp-mode">
-            <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21C7 17 4 13.5 4 9.5A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 8 3.5c0 4-3 7.5-8 11.5z"/></svg></span>
-            <span class="nm">Stimulate</span>
-          </div>
-          <div class="pp-mode">
-            <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c3 4 6 6.5 6 10a6 6 0 0 1-12 0c0-3.5 3-6 6-10z"/></svg></span>
-            <span class="nm">Expression</span>
-          </div>
-          <div class="pp-mode on">
-            <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></span>
-            <span class="nm">Mixed</span>
-          </div>
-        </div>
-      </div>
+  <!-- 看板4 BBM / Baby Crib 页面 — 整图还原（只读，仅返回） -->
+  <div class="page subpage imgpage" id="monitorPage">
+    <div class="imgpage-scroll">
+      <img class="imgpage-shot" src="board4-monitor.png" alt="Baby Crib">
     </div>
-
-    <div class="pp-start">
-      <button>
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        Start Pumping
-      </button>
-    </div>
+    <span class="imgpage-back" data-close-sub>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+    </span>
   </div>
 
   <!-- =============== DETAIL PAGE =============== -->
@@ -2343,6 +2288,10 @@
     // —— 失败：重连 / 帮助 ——
     $("Reconnect").addEventListener("click", (e) => { e.stopPropagation(); set("pulling"); });
     help.addEventListener("click", (e) => { e.stopPropagation(); });
+
+    // —— 卡片头部（含右侧箭头）→ 进入看板4 BBM 页面 ——
+    const head = $("Head");
+    if (head) head.addEventListener("click", (e) => { e.stopPropagation(); openSub("monitorPage"); });
 
     set("default");
     return {
