@@ -297,8 +297,9 @@
   .p2-dev.cleaning { background: #e5f5e5; border: 1px solid rgba(49,0,13,.05); color: #1a5140; }
   .p2-dev.cleaning .act.btn { background: #1a5140; }
   .p2-dev.toner    { background: #ffeff2; border: 1px solid #ffdde1; color: #770523; }
-  .p2-dev.t31      { background: linear-gradient(135deg, #cfe9d6 0%, #6fb389 55%, #5ca87c 100%); border: 1px solid rgba(26,81,64,.10); color: #1a5140; }
+  .p2-dev.t31      { background-color: #def7e0; background-image: radial-gradient(120% 140% at 18% 120%, #aee0bd 0%, rgba(174,224,189,0) 60%); border: 1px solid #eceaef; color: #1a5140; }
   .p2-dev.t31 .tile { background: rgba(255,255,255,0.9); box-shadow: inset 0 0 0 1px #fff; }
+  .p2-dev.t31 .tile img { max-width: 84px; max-height: 84px; object-fit: contain; }
   .p2-dev.offline  { background: #fff; border: 1px solid #eceaef; color: #1b1821; }
   .p2-dev.offline .tile { background: #f8f7f9; }
   .p2-dev.offline .tile img { opacity: .5; }
@@ -573,9 +574,11 @@
   .card-sm.pink .meta { color: #3d0b08; opacity: 0.85; }
   .card-sm-info .meta svg { width: 14px; height: 14px; }
 
-  /* ===== T31 体温贴（看板3 设备页_一期：薄荷绿渐变 #5ca87c / 深绿字 #1a5140）===== */
+  /* ===== T31 体温贴（看板3 设备页_一期：底色 #def7e0 + 柔光，深绿字 #1a5140）===== */
   .card-sm.t31 {
-    background: linear-gradient(135deg, #cfe9d6 0%, #6fb389 55%, #5ca87c 100%);
+    background-color: #def7e0;
+    background-image: radial-gradient(120% 140% at 18% 120%, #aee0bd 0%, rgba(174,224,189,0) 60%);
+    border: 1px solid #eceaef;
   }
   .card-sm.t31 h3 { color: #1a5140; }
   .card-sm.t31 .meta { color: #1a5140; opacity: 0.92; }
@@ -583,7 +586,9 @@
   .card-sm-thumb.t31-thumb {
     background-color: rgba(255,255,255,0.9);
     box-shadow: inset 0 0 0 1px #fff;
-    background-size: 80% auto;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   /* ===== M5 Smart (双主机系列) — 按设计图 ===== */
@@ -1442,7 +1447,7 @@
 
         <!-- 6. T31 体温贴 (绿色, 按看板3) -->
         <div class="card-sm t31" data-id="t31">
-          <div class="card-sm-thumb t31-thumb" style="background-image:url('prod-t31.png')"></div>
+          <div class="card-sm-thumb t31-thumb" style="background-image:url('prod-t31-sq.png')"></div>
           <div class="card-sm-info">
             <h3>T31</h3>
             <span class="meta">
@@ -1705,7 +1710,7 @@
         <!-- 5. T31 体温贴（看板3） -->
         <div class="p2-dev t31">
           <div class="left">
-            <div class="tile"><img src="prod-t31.png" alt="T31"></div>
+            <div class="tile"><img src="prod-t31-sq.png" alt="T31"></div>
             <div class="txt">
               <span class="name">T31</span>
               <span class="sub">
