@@ -924,30 +924,26 @@
     overflow: hidden;
   }
   .page.subpage.open { transform: translateX(0); pointer-events: auto; }
-  /* 整图还原页（看板4 吸奶器 / BBM）— 截图自带状态栏与导航栏。
-     裁掉截图顶部 54px 状态栏（图片上移），导航栏紧贴真机安全区下方；
-     返回不另画按钮，只在设计稿原本的返回箭头位置叠一个透明热区 */
+  /* 整图还原页（看板4 吸奶器 / BBM）— 设计稿已隐藏系统状态栏，
+     截图第一行就是导航栏。顶部留真机安全区（用导航栏底色填充），
+     导航栏紧贴真实状态栏下方，不重叠 */
   .imgpage { background: #fff; }
   .imgpage-scroll {
     position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
-    padding-top: env(safe-area-inset-top, 0px);
+    padding-top: env(safe-area-inset-top);
   }
-  /* 上移 54px 把截图自带的系统状态栏裁掉，露出原导航栏作为顶部 */
-  .imgpage-shot { display: block; width: 100%; height: auto; margin-top: -54px; }
+  /* 安全区填充色 = 各页导航栏底色，避免出现白条 */
+  #pumpPage .imgpage-scroll { background: #f6ece4; }
+  #monitorPage .imgpage-scroll { background: #e9e2fb; }
+  .imgpage-shot { display: block; width: 100%; height: auto; }
   /* 透明返回热区：叠在截图导航栏左侧的原返回箭头上 */
   .imgpage-back {
     position: absolute; left: 0; z-index: 5;
-    top: calc(env(safe-area-inset-top, 0px));
-    width: 60px; height: 48px; cursor: pointer;
+    top: env(safe-area-inset-top); width: 64px; height: 56px; cursor: pointer;
     background: transparent;
   }
   .imgpage-back:active { background: rgba(0,0,0,0.05); }
   .imgpage-back svg { display: none; }
-  /* 桌面预览：无安全区，导航栏热区紧贴顶部 */
-  @media (min-width: 768px) {
-    .imgpage-scroll { padding-top: 0; }
-    .imgpage-back { top: 0; }
-  }
   .sub-nav {
     position: absolute; left: 0; right: 0; top: 0;
     height: calc(62px + 44px);
@@ -1836,10 +1832,10 @@
     <span class="imgpage-back" data-close-sub aria-label="返回"></span>
   </div>
 
-  <!-- 看板4 BBM / Baby Crib 页面 — 整图还原（只读，仅返回） -->
+  <!-- 看板4 BBM / Baby Monitor 页面 — 整图还原（只读，仅返回） -->
   <div class="page subpage imgpage" id="monitorPage">
     <div class="imgpage-scroll">
-      <img class="imgpage-shot" src="board4-monitor.png" alt="Baby Crib">
+      <img class="imgpage-shot" src="board4-monitor.png" alt="Baby Monitor">
     </div>
     <!-- 透明返回热区，叠在截图原返回箭头上 -->
     <span class="imgpage-back" data-close-sub aria-label="返回"></span>
