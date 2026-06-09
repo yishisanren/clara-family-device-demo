@@ -77,6 +77,16 @@
     pointer-events: auto;
     z-index: 14;
   }
+  .page.phase2 {
+    z-index: 11;
+    transform: translateX(100%);
+    pointer-events: none;
+  }
+  .page.phase2.show {
+    transform: translateX(0);
+    pointer-events: auto;
+    z-index: 15;
+  }
   .page.detail {
     z-index: 20;
     transform: translateY(100%);
@@ -94,6 +104,45 @@
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
   }
+
+  /* === PHASE 2 DEVICE PAGE (per Figma 看板2 设备页_二期 1:2021) === */
+  .p2-content {
+    position: absolute; inset: 62px 0 94px 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  @media (max-width: 767px) {
+    .p2-content { inset: env(safe-area-inset-top) 0 calc(80px + env(safe-area-inset-bottom)) 0; }
+  }
+  .p2-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 12px 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .p2-scroll::-webkit-scrollbar { display: none; }
+  /* full-image card (Figma symbol rendered as image) */
+  .p2-card {
+    width: 100%;
+    display: block;
+    border-radius: 22px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.18s ease;
+  }
+  .p2-card:active { transform: scale(0.99); }
+  .p2-card img {
+    width: 100%;
+    display: block;
+    border-radius: 22px;
+  }
+  .p2-card.static { cursor: default; }
+  .p2-card.static:active { transform: none; }
 
   /* === DEVICES LIST PAGE (per Figma 14691:29285) === */
   .devices-content {
@@ -182,6 +231,91 @@
     -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
   }
 
+  /* ====== BBM interactive state machine (per Figma 看板 3) ====== */
+  .card-bbm-preview { cursor: pointer; }
+  .bbm-frame {
+    position: absolute; inset: 0;
+    background: url(asset-baby-live.png) center/cover no-repeat;
+    transition: filter .35s ease, transform .35s ease;
+  }
+  .bbm-frame.blur { filter: blur(13px) brightness(.92); transform: scale(1.18); }
+  /* purple gradient overlay for loading / fail */
+  .bbm-grad {
+    position: absolute; inset: 0; opacity: 0;
+    background: linear-gradient(135deg,#3a2170 0%,#6a4bb0 55%,#8a6fce 100%);
+    transition: opacity .35s ease; pointer-events: none;
+  }
+  .bbm-grad.on { opacity: .9; }
+
+  /* center play button (default / no-stream) */
+  .bbm-center {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    width: 50px; height: 50px; border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+    -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 4;
+  }
+  .bbm-center svg { width: 22px; height: 22px; margin-left: 3px; }
+
+  /* secure connection (loading) */
+  .bbm-secure {
+    position: absolute; inset: 0; z-index: 5; color: #fff;
+    padding: 16px; display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .bbm-secure .ttl { font-size: 19px; font-weight: 700; line-height: 1.12; }
+  .bbm-secure .desc { font-size: 11px; color: rgba(255,255,255,.85); margin-top: 7px; }
+  .bbm-secure .spin { position: absolute; right: 14px; top: 14px; width: 30px; height: 30px; }
+  .bbm-secure .spin .ring { transform-origin: center; animation: bbmspin 1s linear infinite; }
+  @keyframes bbmspin { to { transform: rotate(360deg); } }
+
+  /* sleep: tap to wake pill */
+  .bbm-wake {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    z-index: 5; display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,.92); border-radius: 30px;
+    padding: 6px 6px 6px 18px; box-shadow: 0 6px 20px rgba(0,0,0,.18);
+  }
+  .bbm-wake span { font-size: 13px; color: #1c1c1e; font-weight: 500; white-space: nowrap; }
+  .bbm-wake .moon {
+    width: 32px; height: 32px; border-radius: 50%; background: #4a2b8c;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .bbm-wake .moon svg { width: 17px; height: 17px; }
+
+  /* fail state */
+  .bbm-fail {
+    position: absolute; inset: 0; z-index: 6;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 16px; color: #fff;
+  }
+  .bbm-fail .msg { font-size: 13px; color: rgba(255,255,255,.95); }
+  .bbm-fail .btns { display: flex; gap: 12px; }
+  .bbm-fail button {
+    border: none; font-size: 13px; font-weight: 500; padding: 9px 20px;
+    border-radius: 22px; cursor: pointer;
+  }
+  .bbm-fail .reconnect { background: rgba(255,255,255,.92); color: #3a2170; }
+  .bbm-fail .help { background: rgba(120,108,150,.7); color: #efeafb; }
+
+  /* state-two (offline) dims the whole card */
+  .card-bbm.is-offline .card-bbm-head { opacity: .45; }
+  .card-bbm.is-offline .bbm-fail button { font-weight: 400; }
+  .card-bbm.is-offline .bbm-fail .reconnect { background: rgba(255,255,255,.55); color: #5a5470; }
+
+  /* header indicator swaps: chevron (browse) vs nothing while playing — keep chevron always */
+  .bbm-hidden { display: none !important; }
+
+  /* transient hint toast inside preview */
+  .bbm-toast {
+    position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%);
+    background: rgba(20,12,38,.82); color: #fff; font-size: 11px;
+    padding: 6px 13px; border-radius: 16px; z-index: 20;
+    opacity: 0; transition: opacity .25s; pointer-events: none;
+    white-space: nowrap; max-width: 90%;
+  }
+  .bbm-toast.show { opacity: 1; }
+
   /* ----- Small card (361x128 in Figma, padding 16, white-square 96x96, product 72x72) ----- */
   .card-sm {
     border-radius: 22px;
@@ -260,6 +394,33 @@
   .switcher button.on { background: #fff; color: #111; }
   @media (min-width: 768px) {
     .switcher { top: 24px; right: 24px; }
+  }
+
+  /* BBM state-jump panel (demo aid) */
+  .bbm-flow-switch {
+    position: fixed; left: 12px; bottom: 12px; z-index: 9999;
+    background: rgba(28,20,46,.9); color: #fff;
+    border-radius: 16px; padding: 12px 14px;
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    box-shadow: 0 12px 32px -12px rgba(0,0,0,.5);
+    max-width: 250px;
+  }
+  .bbm-flow-title { font-size: 11px; font-weight: 600; opacity: .85; margin-bottom: 8px; }
+  .bbm-flow-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+  .bbm-flow-btns button {
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.16);
+    color: #e8e0ff; font-size: 11px; padding: 5px 10px; border-radius: 13px; cursor: pointer;
+    transition: .12s;
+  }
+  .bbm-flow-btns button:hover { background: rgba(255,255,255,.2); }
+  .bbm-flow-btns button.on { background: #fff; color: #2a1a4a; border-color: #fff; font-weight: 600; }
+  .bbm-flow-fail {
+    display: flex; align-items: center; gap: 6px; margin-top: 10px;
+    font-size: 11px; opacity: .85; cursor: pointer;
+  }
+  .bbm-flow-fail input { accent-color: #8a6fce; }
+  @media (max-width: 767px) {
+    .bbm-flow-switch { left: 8px; bottom: 8px; max-width: 200px; padding: 10px; }
   }
   /* ====== EMPTY STATE ====== */
   .empty-content {
@@ -635,9 +796,10 @@
 
       <div class="devices-scroll">
 
-        <!-- 1. BBM Baby Monitor (purple, big card) -->
-        <div class="card-bbm" data-id="bm08">
-          <div class="card-bbm-head">
+        <!-- 1. BBM Baby Monitor (purple, big card) — interactive state machine per Figma 看板 3 -->
+        <div class="card-bbm" id="bbmCard" data-state="default">
+          <!-- head: tap → 进入设备详情页 -->
+          <div class="card-bbm-head" id="bbmHead" data-id="bm08">
             <div class="card-bbm-avatar">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="6" width="14" height="12" rx="2"/>
@@ -655,19 +817,67 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
             </span>
           </div>
-          <div class="card-bbm-preview">
-            <div class="card-bbm-timestamp">2025-01-08 14:30:55</div>
-            <div class="card-bbm-controls">
-              <button aria-label="Volume">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19 12c0-3-1.5-5-3-6"/><path d="M22 12c0-5-2.5-8-5-9"/></svg>
+
+          <!-- preview / monitor viewport: drives the state machine -->
+          <div class="card-bbm-preview" id="bbmPreview">
+            <!-- live / blurred video frame -->
+            <div class="bbm-frame blur" id="bbmFrame"></div>
+            <!-- purple gradient overlay (loading / fail) -->
+            <div class="bbm-grad" id="bbmGrad"></div>
+
+            <!-- timestamp (shown when playing) -->
+            <div class="card-bbm-timestamp bbm-hidden" id="bbmTime">2025-01-08 14:30:55</div>
+
+            <!-- center play button (default / no-stream) -->
+            <div class="bbm-center" id="bbmCenter">
+              <svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+
+            <!-- secure connection (loading) -->
+            <div class="bbm-secure bbm-hidden" id="bbmSecure">
+              <div class="spin">
+                <svg class="ring" width="30" height="30" viewBox="0 0 30 30" fill="none">
+                  <circle cx="15" cy="15" r="11" stroke="rgba(255,255,255,.25)" stroke-width="2.5"/>
+                  <path d="M15 4a11 11 0 0 1 11 11" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M15 9.5l-2 2.2h4l-2 2.2" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </div>
+              <div class="ttl">Secure<br>Connection</div>
+              <div class="desc">Connecting with end-to-end encryption…</div>
+            </div>
+
+            <!-- play-control bar (control state) -->
+            <div class="card-bbm-controls bbm-hidden" id="bbmControls">
+              <button aria-label="Volume" id="bbmMute">
+                <svg id="bbmMuteIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19 12c0-3-1.5-5-3-6"/><path d="M22 12c0-5-2.5-8-5-9"/></svg>
               </button>
-              <button class="play" aria-label="Pause">
+              <button class="play" aria-label="Pause" id="bbmPause">
                 <svg viewBox="0 0 24 24" fill="currentColor"><rect x="8" y="6" width="3" height="12" rx="1"/><rect x="13" y="6" width="3" height="12" rx="1"/></svg>
               </button>
-              <button aria-label="Fullscreen">
+              <button aria-label="Fullscreen" id="bbmFull">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
               </button>
             </div>
+
+            <!-- sleep: tap to wake -->
+            <div class="bbm-wake bbm-hidden" id="bbmWake">
+              <span>Tap to wake camera</span>
+              <div class="moon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+              </div>
+            </div>
+
+            <!-- fail state -->
+            <div class="bbm-fail bbm-hidden" id="bbmFail">
+              <div class="msg">Please check the device status.</div>
+              <div class="btns">
+                <button class="help bbm-hidden" id="bbmHelp">View Help</button>
+                <button class="reconnect" id="bbmReconnect">Reconnect</button>
+              </div>
+            </div>
+
+            <!-- transient hint -->
+            <div class="bbm-toast" id="bbmToast"></div>
           </div>
         </div>
 
@@ -698,6 +908,64 @@
           </div>
         </div>
 
+      </div>
+    </div>
+
+    <!-- Tab bar (shared) -->
+    <div class="tab-bar">
+      <div class="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7v9a2 2 0 0 1-2 2h-4v-7H9v7H5a2 2 0 0 1-2-2v-9z"/></svg>
+        <span>Home</span>
+      </div>
+      <div class="tab active">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.2L19.5 8 12 11.8 4.5 8 12 4.2z"/></svg>
+        <span>Device</span>
+      </div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.2 8.4C19 5.4 16 3.4 12.8 3.4c-2.6 0-5 1.2-6.6 3.2L4 4.6v6h6L7.8 8.4c1.2-1.4 3-2.2 5-2.2 2.4 0 4.6 1.4 5.6 3.6.4.8 1.2 1.2 2 1z"/><path d="M3.8 15.6c1.2 3 4.2 5 7.4 5 2.6 0 5-1.2 6.6-3.2L20 19.4v-6h-6l2.2 2.2c-1.2 1.4-3 2.2-5 2.2-2.4 0-4.6-1.4-5.6-3.6-.4-.8-1.2-1.2-2-1z"/></svg>
+        <span>Community</span>
+      </div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+        <span>Me</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============== PHASE 2 DEVICE PAGE (Figma 看板2 设备页_二期) =============== -->
+  <div class="page phase2" id="phase2Page">
+    <div class="p2-content">
+      <div class="top-nav">
+        <h1>Clara's Family</h1>
+        <button class="plus-btn" aria-label="Add">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+
+      <div class="p2-scroll">
+        <!-- 1. Breast Pump — three-state interactive card -->
+        <!--    state 0: 有吸奶数据 x≤12h → tap → state 1: 双边不同步韵律 → tap → state 2: 结束吸奶 -->
+        <div class="p2-card" id="pumpCard">
+          <img id="pumpImg" src="p2-card-12h.png" alt="Breast Pump">
+        </div>
+
+        <!-- 2. BBM Baby Monitor -->
+        <div class="p2-card static"><img src="p2-bbm.png" alt="Clara's Baby Monitor 01"></div>
+
+        <!-- 3. Cleaning Machine — running -->
+        <div class="p2-card static"><img src="p2-cleaning-run.png" alt="Cleaning Machine"></div>
+
+        <!-- 4. Muscle Toner -->
+        <div class="p2-card static"><img src="p2-toner.png" alt="Muscle Toner"></div>
+
+        <!-- 5. FD04 Formula maker -->
+        <div class="p2-card static"><img src="p2-formula.png" alt="FD04"></div>
+
+        <!-- 6. Cleaning Machine — offline -->
+        <div class="p2-card static"><img src="p2-cleaning-off.png" alt="Cleaning Machine Offline"></div>
+
+        <!-- 7. Air Purifier — offline -->
+        <div class="p2-card static"><img src="p2-purifier.png" alt="Air Purifier"></div>
       </div>
     </div>
 
@@ -840,7 +1108,8 @@
 
 <!-- Preview switcher (toggle between empty state and devices list) -->
 <div class="switcher">
-  <button id="switchDevices" class="on">设备页</button>
+  <button id="switchDevices" class="on">一期</button>
+  <button id="switchPhase2">二期</button>
   <button id="switchEmpty">空态</button>
 </div>
 
@@ -1076,24 +1345,194 @@
     });
   });
 
-  // ============ Page switcher (empty <-> devices list) ============
+  // ============ Page switcher (一期 / 二期 / 空态) ============
   const emptyPage = document.getElementById("emptyPage");
-  const devicesPage = document.getElementById("devicesPage");
-  const btnDevices = document.getElementById("switchDevices");
-  const btnEmpty = document.getElementById("switchEmpty");
-  function showEmpty(on) {
-    if (on) {
-      emptyPage.classList.add("show");
-      btnEmpty.classList.add("on");
-      btnDevices.classList.remove("on");
-    } else {
-      emptyPage.classList.remove("show");
-      btnDevices.classList.add("on");
-      btnEmpty.classList.remove("on");
-    }
+  const phase2Page = document.getElementById("phase2Page");
+  const btnDevices = document.getElementById("switchDevices");  // 一期
+  const btnPhase2 = document.getElementById("switchPhase2");    // 二期
+  const btnEmpty = document.getElementById("switchEmpty");      // 空态
+
+  function showView(view) {
+    // view: "phase1" | "phase2" | "empty"
+    emptyPage.classList.toggle("show", view === "empty");
+    phase2Page.classList.toggle("show", view === "phase2");
+    btnDevices.classList.toggle("on", view === "phase1");
+    btnPhase2.classList.toggle("on", view === "phase2");
+    btnEmpty.classList.toggle("on", view === "empty");
   }
-  btnDevices.addEventListener("click", () => showEmpty(false));
-  btnEmpty.addEventListener("click", () => showEmpty(true));
+  btnDevices.addEventListener("click", () => showView("phase1"));
+  btnPhase2.addEventListener("click", () => showView("phase2"));
+  btnEmpty.addEventListener("click", () => showView("empty"));
+
+  // ============ Phase 2: Breast Pump 3-step flow ============
+  // state 0 有吸奶数据 x≤12h → tap → state 1 双边不同步韵律 → tap → state 2 结束吸奶 → tap → back to 0
+  (() => {
+    const card = document.getElementById("pumpCard");
+    const img  = document.getElementById("pumpImg");
+    if (!card || !img) return;
+    const states = ["p2-card-12h.png", "p2-card-rhythm.png", "p2-card-end.png"];
+    let step = 0;
+    card.addEventListener("click", () => {
+      step = (step + 1) % states.length;
+      img.src = states[step];
+    });
+  })();
+
+  // ============ BBM card interactive state machine (per Figma 看板 3) ============
+  // States: default | nostream | pulling | control | playing | sleep | fail1 | fail2
+  //   default / nostream : 模糊上一帧 + 中心播放键。点画面→拉流；点卡片头→详情页
+  //   pulling            : 紫色渐变 + Secure Connection + loading。成功→control / 失败→fail
+  //   control            : 清晰直播 + 控制条 + 时间戳。无操作3秒→playing(清屏)；点暂停→nostream
+  //   playing(清屏)      : 仅直播画面。点画面→control
+  //   sleep              : 模糊 + Tap to wake → 拉流
+  //   fail1 / fail2      : 失败提示 + Reconnect(/ View Help)。Reconnect→拉流
+  (() => {
+    const card   = document.getElementById("bbmCard");
+    const preview= document.getElementById("bbmPreview");
+    const frame  = document.getElementById("bbmFrame");
+    const grad   = document.getElementById("bbmGrad");
+    const time   = document.getElementById("bbmTime");
+    const center = document.getElementById("bbmCenter");
+    const secure = document.getElementById("bbmSecure");
+    const controls=document.getElementById("bbmControls");
+    const wake   = document.getElementById("bbmWake");
+    const fail   = document.getElementById("bbmFail");
+    const help   = document.getElementById("bbmHelp");
+    const toast  = document.getElementById("bbmToast");
+    if (!card) return;
+
+    const layers = [center, secure, controls, wake, fail];
+    const hideLayers = () => layers.forEach(l => l.classList.add("bbm-hidden"));
+
+    let state = "default";
+    let idleTimer = null, pullTimer = null, toastTimer = null;
+    let forceFail = null; // when set, next pulling ends in this fail state
+    const clearTimers = () => { clearTimeout(idleTimer); clearTimeout(pullTimer); idleTimer = pullTimer = null; };
+    function syncFlow() {
+      const w = document.querySelector(".bbm-flow-btns");
+      if (w) w.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.k === state));
+    }
+
+    function hint(msg) {
+      toast.textContent = msg; toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 1500);
+    }
+
+    function set(s) {
+      clearTimers(); hideLayers();
+      card.classList.remove("is-offline");
+      grad.classList.remove("on");
+      frame.classList.add("blur");
+      time.classList.add("bbm-hidden");
+      state = s; card.dataset.state = s;
+
+      switch (s) {
+        case "default":
+        case "nostream":
+          center.classList.remove("bbm-hidden");
+          break;
+
+        case "pulling":
+          grad.classList.add("on");
+          secure.classList.remove("bbm-hidden");
+          pullTimer = setTimeout(() => {
+            if (forceFail) { const f = forceFail; forceFail = null; set(f); hint("拉流失败"); }
+            else { set("control"); hint("连接成功，开始播放"); }
+          }, 2400);
+          break;
+
+        case "control":
+          frame.classList.remove("blur");
+          time.classList.remove("bbm-hidden");
+          controls.classList.remove("bbm-hidden");
+          armIdle();
+          break;
+
+        case "playing": // 清屏
+          frame.classList.remove("blur");
+          time.classList.remove("bbm-hidden");
+          break;
+
+        case "sleep":
+          wake.classList.remove("bbm-hidden");
+          break;
+
+        case "fail1":
+          grad.classList.add("on");
+          fail.classList.remove("bbm-hidden");
+          help.classList.add("bbm-hidden");
+          break;
+
+        case "fail2": // 设备离线，整体置灰
+          fail.classList.remove("bbm-hidden");
+          help.classList.remove("bbm-hidden");
+          card.classList.add("is-offline");
+          break;
+      }
+      syncFlow();
+    }
+
+    function armIdle() {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => { if (state === "control") { set("playing"); hint("无操作 3 秒，自动清屏"); } }, 3000);
+    }
+
+    // —— 单击监控画面区域 ——
+    preview.addEventListener("click", () => {
+      if (state === "default" || state === "nostream") { hint("点击监控画面 → 拉流"); set("pulling"); }
+      else if (state === "control") { hint("清屏"); set("playing"); }
+      else if (state === "playing") { hint("唤出控制条"); set("control"); }
+    });
+
+    // —— 休眠：Tap to wake ——
+    wake.addEventListener("click", (e) => { e.stopPropagation(); hint("唤醒摄像头 → 拉流"); set("pulling"); });
+
+    // —— 控制条按钮 ——
+    document.getElementById("bbmPause").addEventListener("click", (e) => { e.stopPropagation(); hint("暂停 → 结束播放"); set("nostream"); });
+    document.getElementById("bbmFull").addEventListener("click", (e) => { e.stopPropagation(); hint("全屏"); armIdle(); });
+    document.getElementById("bbmMute").addEventListener("click", (e) => {
+      e.stopPropagation();
+      const ic = document.getElementById("bbmMuteIcon");
+      const muted = ic.dataset.muted === "1";
+      ic.dataset.muted = muted ? "0" : "1";
+      ic.style.opacity = muted ? "1" : ".45";
+      hint(muted ? "取消静音" : "已静音");
+      armIdle();
+    });
+
+    // —— 失败：重连 / 帮助 ——
+    document.getElementById("bbmReconnect").addEventListener("click", (e) => { e.stopPropagation(); hint("重新拉流"); set("pulling"); });
+    help.addEventListener("click", (e) => { e.stopPropagation(); hint("查看帮助"); });
+
+    // —— 演示用：状态直达切换器 ——
+    const flowDefs = [
+      ["default","默认"],["nostream","无拉流"],["sleep","休眠"],
+      ["pulling","拉流中"],["control","播放控制"],["playing","清屏"],
+      ["fail1","失败一"],["fail2","失败二·离线"]
+    ];
+    const sw = document.createElement("div");
+    sw.className = "bbm-flow-switch";
+    sw.innerHTML =
+      '<div class="bbm-flow-title">BBM 状态直达（演示）</div>' +
+      '<div class="bbm-flow-btns"></div>' +
+      '<label class="bbm-flow-fail"><input type="checkbox" id="bbmForceFail"> 下次拉流失败</label>';
+    document.body.appendChild(sw);
+    const btnWrap = sw.querySelector(".bbm-flow-btns");
+    flowDefs.forEach(([k,label]) => {
+      const b = document.createElement("button");
+      b.textContent = label; b.dataset.k = k;
+      b.onclick = () => set(k);
+      btnWrap.appendChild(b);
+    });
+    document.getElementById("bbmForceFail").addEventListener("change", (e) => {
+      forceFail = e.target.checked ? "fail1" : null;
+      hint(forceFail ? "已设置：下次拉流将失败" : "已取消失败模拟");
+    });
+
+    set("default");
+    window.__bbmSet = set; // demo/testing hook
+  })();
 
   // init
   render();
