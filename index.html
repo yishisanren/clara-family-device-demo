@@ -379,16 +379,7 @@
   .card[data-color="pink"] .card-body { background: var(--card-pink); }
   .card[data-color="green"] .card-body { background: var(--card-green); }
   .card[data-color="purple"] .card-body { background: var(--card-purple); }
-  .card[data-color="gray"] .card-body { background: var(--card-gray); }
   .card[data-color="beige"] .card-body { background: var(--card-beige); }
-  .card[data-color="gray"] .card-img { background: #b8b8ba; display: flex; align-items: center; justify-content: center; }
-  .v3-placeholder p {
-    margin: 0;
-    text-align: center;
-    color: #7a6e7e;
-    font-size: 13px;
-    line-height: 1.45;
-  }
 
   .card-tag {
     font-size: 11px;
@@ -768,23 +759,14 @@
               <p class="card-title">Slim, elegant pumping anywhere.</p>
             </div>
           </div>
-          <div class="card" data-pos="center" data-color="gray" data-id="v3">
-            <div class="card-img v3-placeholder">
-              <p>设备未上市<br>配图待定</p>
-            </div>
-            <div class="card-body">
-              <p class="card-tag">V3 Smart Pump System</p>
-              <p class="card-title">Turn any room into a sleep space.</p>
-            </div>
-          </div>
-          <div class="card" data-pos="right" data-color="yellow" data-id="bm08">
+          <div class="card" data-pos="center" data-color="yellow" data-id="bm08">
             <div class="card-img" style="background-image:url('pic-bm08.png')"></div>
             <div class="card-body">
               <p class="card-tag">Smart Baby Monitor BM08</p>
               <p class="card-title">See every moment. Even in the dark.</p>
             </div>
           </div>
-          <div class="card" data-pos="hidden-right" data-color="green" data-id="wn02">
+          <div class="card" data-pos="right" data-color="green" data-id="wn02">
             <div class="card-img" style="background-image:url('pic-wn02.png')"></div>
             <div class="card-body">
               <p class="card-tag">Sleep Sound Machine WN02</p>
@@ -801,7 +783,7 @@
         </div>
 
         <div class="indicator" id="indicator">
-          <span></span><span></span><span class="active"></span><span></span><span></span><span></span>
+          <span></span><span></span><span class="active"></span><span></span><span></span>
         </div>
       </div>
 
@@ -864,12 +846,14 @@
 
 <script>
   // ============ Device data (per Figma board 1, file Znc2vufEoflEkTQ4wxsF2C) ============
+  // Each device uses its real hero (pic1, 393x363) and middle image (pic2, 393x271)
+  // from the corresponding 设备生态介绍-XXX detail page in Figma.
   const devices = {
     w1: {
       name: "W1 Comfort Pump System",
       title: "Comfort that supports natural let-down with warm massage",
-      hero: "pic-w1.png",
-      img2: "pic-w1.png",
+      hero: "hero-w1.png",
+      img2: "img2-w1.png",
       quote: "<strong>W1 is designed to make pumping more comfortable,</strong> with warmth and massage that support natural milk flow.",
       features: [
         { title: "Warm compress and rhythmic massage to support faster let-down", desc: "Helps encourage milk flow earlier in the session for a smoother, more efficient pumping experience." },
@@ -881,8 +865,8 @@
     air1: {
       name: "Air1 Wearable Pump",
       title: "Freedom to pump anywhere with a slim, wearable design",
-      hero: "pic-air1.png",
-      img2: "pic-air1.png",
+      hero: "hero-air1.png",
+      img2: "img2-air1.png",
       quote: "<strong>Air1 is designed for discreet,</strong> on-the-go pumping without interrupting your daily routine.",
       features: [
         { title: "Ultra-slim wearable design for truly discreet pumping", desc: "Fits comfortably inside your bra for near-invisible, hands-free use." },
@@ -891,21 +875,11 @@
         { title: "Smart maintenance reminders", desc: "Notifies when parts need replacement to help maintain reliable performance." }
       ]
     },
-    v3: {
-      name: "V3 Smart Pump System",
-      title: "Coming soon",
-      hero: "",
-      img2: "",
-      quote: "<strong>V3 Smart Pump System</strong> is not yet available — full preview is still in development.",
-      features: [
-        { title: "Device not yet released", desc: "This device is shown as a placeholder. Full content will be available at launch." }
-      ]
-    },
     bm08: {
       name: "Smart Baby Monitor BM08",
       title: "Stay connected to your baby, all night long",
-      hero: "pic-bm08.png",
-      img2: "pic-bm08.png",
+      hero: "hero-bm08.png",
+      img2: "img2-bm08.png",
       quote: "<strong>BM08 offers contact-free</strong> breathing and sleep monitoring with AI-powered alerts, so you can check on your baby in real time.",
       features: [
         { title: "See your baby clearly through the night", desc: "No need to turn on the lights. 2K live video shows your baby clearly — even in the dark. See movements, wake-ups, sleep in real time." },
@@ -917,8 +891,8 @@
     wn02: {
       name: "Sleep Sound Machine WN02",
       title: "A calmer night, every night",
-      hero: "pic-wn02.png",
-      img2: "pic-wn02.png",
+      hero: "hero-wn02.png",
+      img2: "img2-wn02.png",
       quote: "<strong>WN02 combines sound, light, and automation</strong> to help build a calmer bedtime routine.",
       features: [
         { title: "34 soothing sound options for sleep and relaxation", desc: "Includes white noise, fan sounds, lullabies, and natural sounds to block distractions." },
@@ -930,8 +904,8 @@
     t31: {
       name: "Wearable Digital Thermometer T31",
       title: "Measured with precision, made for peace of mind",
-      hero: "pic-t31.png",
-      img2: "pic-t31.png",
+      hero: "hero-t31.png",
+      img2: "img2-t31.png",
       quote: "<strong>T31 continuously monitors your baby's body temperature</strong> and helps you respond quickly to changes.",
       features: [
         { title: "Accurate temperature tracking with clear trend insights", desc: "High-precision sensors track temperature changes continuously and automatically generate easy-to-read trends in the app." },
@@ -943,9 +917,9 @@
   };
 
   // ============ Carousel ============
-  // 6 cards from Figma Board 1: W1, Air1, V3, BM08, WN02, T31
-  const order = ["w1", "air1", "v3", "bm08", "wn02", "t31"];
-  let centerIdx = 2; // start at V3 (center of 6)
+  // 5 cards from Figma Board 1 (V3 omitted — not yet released)
+  const order = ["w1", "air1", "bm08", "wn02", "t31"];
+  let centerIdx = 2; // start at BM08 (center of 5)
   const carousel = document.getElementById("carousel");
   const cards = Array.from(carousel.querySelectorAll(".card"));
   const indicator = document.getElementById("indicator");
@@ -1071,11 +1045,8 @@
   function openDetail(id) {
     const d = devices[id];
     if (!d) return;
-    const isPlaceholder = !d.hero;
-    detailHero.style.backgroundImage = isPlaceholder ? "none" : `url('${d.hero}')`;
-    detailHero.style.background = isPlaceholder ? "linear-gradient(135deg, #c0bbc4, #8a838d)" : "";
-    detailImg2.style.backgroundImage = isPlaceholder ? "none" : `url('${d.img2}')`;
-    detailImg2.style.display = isPlaceholder ? "none" : "";
+    detailHero.style.backgroundImage = `url('${d.hero}')`;
+    detailImg2.style.backgroundImage = `url('${d.img2}')`;
     detailTitle.textContent = d.title;
     detailQuote.innerHTML = d.quote;
     detailIntro.textContent = d.intro || "";
