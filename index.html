@@ -126,13 +126,11 @@
     gap: 16px;
   }
   .p2-scroll::-webkit-scrollbar { display: none; }
-  /* full-image card (Figma symbol rendered as image) */
+  /* full-image card (Figma symbol rendered with transparent rounded corners) */
   .p2-card {
     width: 100%;
     flex-shrink: 0;
     display: block;
-    border-radius: 22px;
-    overflow: hidden;
     cursor: pointer;
     transition: transform 0.18s ease;
   }
@@ -140,7 +138,9 @@
   .p2-card img {
     width: 100%;
     display: block;
-    border-radius: 22px;
+    /* PNG already carries its own rounded corners with transparent outside —
+       no border-radius/overflow here, otherwise we'd double-clip and the
+       image's own light corner pixels would show as white/gray wedges. */
   }
   .p2-card.static { cursor: default; }
   .p2-card.static:active { transform: none; }
@@ -352,6 +352,20 @@
     flex-shrink: 0;
     align-self: center;
   }
+  /* photo-fill thumbnail (lifestyle product photos cover the whole square) */
+  .card-sm-thumb.photo {
+    background-size: cover;
+    overflow: hidden;
+  }
+  /* tall slim product cutout (e.g. FD04 milk warmer) — contained, fills height */
+  .card-sm-thumb.product-tall {
+    background-size: auto 78px;
+  }
+  /* offline product cutout on neutral grey square (per Figma 加湿器-关闭) */
+  .card-sm-thumb.product-grey {
+    background-color: #f8f7f9;
+    background-size: auto 68px;
+  }
   .card-sm-info {
     flex: 1; min-width: 0;
     display: flex; flex-direction: column; gap: 4px;
@@ -363,6 +377,13 @@
   }
   .card-sm.green h3 { color: #1e3a30; }
   .card-sm.pink h3 { color: #3d0b08; }
+  .card-sm.yellow h3 { color: #84350e; }
+  .card-sm.offline h3 { color: #9aa0ab; }
+  .card-sm.offline .meta { color: #c0796f; opacity: 1; }
+  .card-sm.offline .card-sm-thumb { opacity: 0.5; }
+  .card-sm.yellow .meta { color: #6b4e17; opacity: 0.8; }
+  .card-sm.yellow .card-sm-action.arrow,
+  .card-sm.offline .card-sm-action.arrow { color: #b8a98f; }
   .card-sm-info .meta {
     font-size: 12px; font-weight: 500;
     margin: 0;
@@ -371,6 +392,52 @@
   .card-sm.green .meta { color: #1e3a30; opacity: 0.75; }
   .card-sm.pink .meta { color: #3d0b08; opacity: 0.85; }
   .card-sm-info .meta svg { width: 14px; height: 14px; }
+
+  /* ===== M5 Smart (双主机系列) — 按设计图 ===== */
+  .card-sm.m5.pink { background: #ffeff2; border: 1px solid #ffdde1; }
+  .card-sm.m5 h3 { color: #770523; }
+  .card-sm.m5 .meta { color: #770523; opacity: 1; }
+  .card-sm.m5 .card-sm-info { gap: 12px; justify-content: center; }
+  .card-sm.m5.dual .card-sm-info { gap: 10px; }
+  /* 单/双吸奶器缩略图布局 */
+  .m5-thumb {
+    display: flex; align-items: center; justify-content: center;
+    background-image: none !important;
+  }
+  .m5-thumb .m5-dev {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+  .m5-thumb.single .m5-dev { width: 72px; height: 72px; }
+  .m5-thumb.double { gap: 4px; }
+  .m5-thumb.double .m5-dev { width: 42px; height: 42px; }
+  /* L/R 行 */
+  .m5-row { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; }
+  .m5-side { font-weight: 600; }
+  .m5-time { font-weight: 400; letter-spacing: 0.2px; }
+  .m5-divider {
+    width: 1px; height: 9px;
+    background: currentColor; opacity: 0.4;
+  }
+  /* 电池图标：圆角外框 + 3 格 + 右侧端子 */
+  .batt {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 1.5px;
+    width: 19px; height: 11px;
+    border: 1.2px solid currentColor; border-radius: 3px;
+    padding: 1.5px;
+  }
+  .batt::after {
+    content: ""; position: absolute;
+    right: -3px; top: 50%; transform: translateY(-50%);
+    width: 1.6px; height: 4px;
+    background: currentColor; border-radius: 0 1px 1px 0;
+  }
+  .batt i {
+    flex: 1; height: 100%;
+    background: currentColor; border-radius: 0.5px;
+  }
   .card-sm-action {
     flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
@@ -899,7 +966,52 @@
           </div>
         </div>
 
-        <!-- 2. Cleaning Machine (green, 128px) -->
+        <!-- 2. M5 Smart — 单主机 (pink) : 1 个吸奶器 + L 行 -->
+        <div class="card-sm pink m5" data-id="m5l">
+          <div class="card-sm-thumb m5-thumb single">
+            <span class="m5-dev" style="background-image:url('m5-device-new.png')"></span>
+          </div>
+          <div class="card-sm-info">
+            <h3>M5 Smart</h3>
+            <span class="meta m5-row">
+              <span class="m5-side">L</span>
+              <span class="batt"><i></i><i></i><i></i></span>
+              <span class="m5-divider"></span>
+              <span class="m5-time">15:45</span>
+            </span>
+          </div>
+          <div class="card-sm-action arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <!-- 3. M5 Smart — 双主机 (pink) : 2 个吸奶器 + L/R 两行 -->
+        <div class="card-sm pink m5 dual" data-id="m5r">
+          <div class="card-sm-thumb m5-thumb double">
+            <span class="m5-dev" style="background-image:url('m5-device-new.png')"></span>
+            <span class="m5-dev" style="background-image:url('m5-device-new.png')"></span>
+          </div>
+          <div class="card-sm-info">
+            <h3>M5 Smart</h3>
+            <span class="meta m5-row">
+              <span class="m5-side">L</span>
+              <span class="batt"><i></i><i></i><i></i></span>
+              <span class="m5-divider"></span>
+              <span class="m5-time">15:45</span>
+            </span>
+            <span class="meta m5-row">
+              <span class="m5-side">R</span>
+              <span class="batt"><i></i><i></i><i></i></span>
+              <span class="m5-divider"></span>
+              <span class="m5-time">04:15:45</span>
+            </span>
+          </div>
+          <div class="card-sm-action arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <!-- 4. Cleaning Machine (green, 128px) -->
         <div class="card-sm green" data-id="cleaning">
           <div class="card-sm-thumb" style="background-image:url('asset-cleaning.png')"></div>
           <div class="card-sm-info">
@@ -911,7 +1023,7 @@
           </div>
         </div>
 
-        <!-- 3. Muscle Toner (pink, 128px) -->
+        <!-- 5. Muscle Toner (pink, 128px) -->
         <div class="card-sm pink" data-id="toner">
           <div class="card-sm-thumb" style="background-image:url('asset-toner.png')"></div>
           <div class="card-sm-info">
@@ -920,6 +1032,41 @@
               <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="17" height="10" rx="2" opacity="0.25"/><rect x="3" y="8" width="13" height="8" rx="1"/><rect x="20" y="10" width="2" height="4" rx="0.5"/></svg>
               80%
             </span>
+          </div>
+          <div class="card-sm-action arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <!-- 6. FD04 (yellow, 128px) -->
+        <div class="card-sm yellow" data-id="fd04">
+          <div class="card-sm-thumb product-tall" style="background-image:url('fd04-device.png')"></div>
+          <div class="card-sm-info">
+            <h3>FD04</h3>
+          </div>
+          <div class="card-sm-action arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <!-- 7. Cleaning Machine — Offline (128px) -->
+        <div class="card-sm offline" data-id="cleaning2">
+          <div class="card-sm-thumb" style="background-image:url('asset-cleaning.png')"></div>
+          <div class="card-sm-info">
+            <h3>Cleaning Machine</h3>
+            <span class="meta">Offline</span>
+          </div>
+          <div class="card-sm-action arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <!-- 8. Air Purifier — Offline (128px) -->
+        <div class="card-sm offline" data-id="air">
+          <div class="card-sm-thumb product-grey" style="background-image:url('airpurifier-device.png')"></div>
+          <div class="card-sm-info">
+            <h3>Air Purifier</h3>
+            <span class="meta">Offline</span>
           </div>
           <div class="card-sm-action arrow">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
