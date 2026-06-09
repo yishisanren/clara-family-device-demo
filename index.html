@@ -260,6 +260,73 @@
     display: flex; align-items: center; justify-content: center;
   }
 
+  /* === Phase-2 device cards (CSS, vector-crisp) === */
+  /* small 128px card: 96px white tile + product 72px, title/status, right action */
+  .p2-dev {
+    width: 100%;
+    border-radius: 24px;
+    padding: 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-sizing: border-box;
+  }
+  .p2-dev .left { display: flex; align-items: center; gap: 16px; min-width: 0; }
+  .p2-dev .tile {
+    width: 96px; height: 96px; border-radius: 12px; flex-shrink: 0;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .p2-dev .tile img { max-width: 72px; max-height: 72px; display: block; object-fit: contain; }
+  .p2-dev .txt { display: flex; flex-direction: column; gap: 11px; min-width: 0; }
+  .p2-dev .name { font-size: 16px; font-weight: 600; letter-spacing: -0.1px; white-space: nowrap; }
+  .p2-dev .sub { font-size: 12px; display: inline-flex; align-items: center; gap: 6px; }
+  .p2-dev .act { flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .p2-dev .act.btn { width: 40px; height: 40px; border-radius: 50%; }
+  .p2-dev .act.btn i { width: 5px; height: 12px; border-radius: 2px; background: #fff; display: inline-block; margin: 0 1.3px; }
+  .p2-dev .act.chev svg { width: 24px; height: 24px; }
+  .p2-dev .bat {
+    width: 18px; height: 10px; border-radius: 2px; position: relative;
+    border: 1px solid currentColor;
+  }
+  .p2-dev .bat::after { content:''; position:absolute; right:-3px; top:3px; width:2px; height:4px; background:currentColor; border-radius:0 1px 1px 0; }
+  .p2-dev .bat i { position:absolute; inset:1.5px; width:80%; background:currentColor; border-radius:1px; display:block; }
+
+  /* per-variant colors */
+  .p2-dev.cleaning { background: #e5f5e5; border: 1px solid rgba(49,0,13,.05); color: #1a5140; }
+  .p2-dev.cleaning .act.btn { background: #1a5140; }
+  .p2-dev.toner    { background: #ffeff2; border: 1px solid #ffdde1; color: #770523; }
+  .p2-dev.fd04     { background: #fff7e0; border: 1px solid rgba(132,53,14,.09); color: #84350e; }
+  .p2-dev.offline  { background: #fff; border: 1px solid #eceaef; color: #1b1821; }
+  .p2-dev.offline .tile { background: #f8f7f9; }
+  .p2-dev.offline .tile img { opacity: .5; }
+  .p2-dev.offline .name { opacity: .5; }
+  .p2-dev.offline .sub { color: #a02646; }
+  .p2-dev .act.chev { color: currentColor; opacity: .55; }
+
+  /* BBM big card (purple) reused look */
+  .p2-bbm-card {
+    width: 100%; border-radius: 24px; overflow: hidden;
+    background: #ece6f8; border: 1px solid rgba(49,0,13,.05);
+    padding: 12px;
+  }
+  .p2-bbm-card .hd { display: flex; align-items: center; gap: 10px; padding: 4px 4px 12px; }
+  .p2-bbm-card .av {
+    width: 36px; height: 36px; border-radius: 12px; background: #fff; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .p2-bbm-card .av svg { width: 22px; height: 22px; color: #5b3aaa; }
+  .p2-bbm-card .info { flex: 1; min-width: 0; }
+  .p2-bbm-card .info h3 { margin: 0 0 3px; font-size: 15px; font-weight: 600; color: #2e1a5a; }
+  .p2-bbm-card .bat2 { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #5b3aaa; font-weight: 500; }
+  .p2-bbm-card .bat2 svg { width: 14px; height: 14px; }
+  .p2-bbm-card .chev { color: #8a78b8; }
+  .p2-bbm-card .chev svg { width: 18px; height: 18px; }
+  .p2-bbm-card .live {
+    position: relative; border-radius: 14px; overflow: hidden;
+    aspect-ratio: 337 / 196;
+    background: #d9cdb8 url(asset-baby-live.png) center/cover no-repeat;
+  }
+
   /* === DEVICES LIST PAGE (per Figma 14691:29285) === */
   .devices-content {
     position: absolute; inset: 62px 0 94px 0;
@@ -1314,22 +1381,83 @@
         </div>
 
         <!-- 2. BBM Baby Monitor -->
-        <div class="p2-card static"><img src="p2-bbm.png" alt="Clara's Baby Monitor 01"></div>
+        <div class="p2-bbm-card">
+          <div class="hd">
+            <span class="av">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="14" height="12" rx="2"/><path d="M17 10l4-2v8l-4-2z"/></svg>
+            </span>
+            <div class="info">
+              <h3>Clara's Baby Monitor 01</h3>
+              <span class="bat2">
+                <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="17" height="10" rx="2" opacity="0.25"/><rect x="3" y="8" width="13" height="8" rx="1"/><rect x="20" y="10" width="2" height="4" rx="0.5"/></svg>
+                60%
+              </span>
+            </div>
+            <span class="chev">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+            </span>
+          </div>
+          <div class="live"></div>
+        </div>
 
         <!-- 3. Cleaning Machine — running -->
-        <div class="p2-card static"><img src="p2-cleaning-run.png" alt="Cleaning Machine"></div>
+        <div class="p2-dev cleaning">
+          <div class="left">
+            <div class="tile"><img src="prod-cleaning.png" alt="Cleaning Machine"></div>
+            <div class="txt">
+              <span class="name">Cleaning Machine</span>
+              <span class="sub">Playing</span>
+            </div>
+          </div>
+          <span class="act btn"><i></i><i></i></span>
+        </div>
 
         <!-- 4. Muscle Toner -->
-        <div class="p2-card static"><img src="p2-toner.png" alt="Muscle Toner"></div>
+        <div class="p2-dev toner">
+          <div class="left">
+            <div class="tile"><img src="prod-toner.png" alt="Muscle Toner"></div>
+            <div class="txt">
+              <span class="name">Muscle Toner</span>
+              <span class="sub"><span class="bat"><i></i></span>80%</span>
+            </div>
+          </div>
+          <span class="act chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
+        </div>
 
         <!-- 5. FD04 Formula maker -->
-        <div class="p2-card static"><img src="p2-formula.png" alt="FD04"></div>
+        <div class="p2-dev fd04">
+          <div class="left">
+            <div class="tile"><img src="prod-fd04.png" alt="FD04"></div>
+            <div class="txt">
+              <span class="name">FD04</span>
+            </div>
+          </div>
+          <span class="act chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
+        </div>
 
         <!-- 6. Cleaning Machine — offline -->
-        <div class="p2-card static"><img src="p2-cleaning-off.png" alt="Cleaning Machine Offline"></div>
+        <div class="p2-dev offline">
+          <div class="left">
+            <div class="tile"><img src="prod-cleaning.png" alt="Cleaning Machine"></div>
+            <div class="txt">
+              <span class="name">Cleaning Machine</span>
+              <span class="sub">Offline</span>
+            </div>
+          </div>
+          <span class="act chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
+        </div>
 
         <!-- 7. Air Purifier — offline -->
-        <div class="p2-card static"><img src="p2-purifier.png" alt="Air Purifier"></div>
+        <div class="p2-dev offline">
+          <div class="left">
+            <div class="tile"><img src="prod-purifier.png" alt="Air Purifier"></div>
+            <div class="txt">
+              <span class="name">Air Purifier</span>
+              <span class="sub">Offline</span>
+            </div>
+          </div>
+          <span class="act chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
+        </div>
       </div>
     </div>
 
