@@ -1273,9 +1273,9 @@
 
 <!-- Preview switcher (toggle between empty state and devices list) -->
 <div class="switcher">
-  <button id="switchDevices" class="on">一期</button>
+  <button id="switchEmpty" class="on">空态</button>
+  <button id="switchDevices">一期</button>
   <button id="switchPhase2">二期</button>
-  <button id="switchEmpty">空态</button>
 </div>
 
 <script>
@@ -1528,6 +1528,9 @@
   btnDevices.addEventListener("click", () => showView("phase1"));
   btnPhase2.addEventListener("click", () => showView("phase2"));
   btnEmpty.addEventListener("click", () => showView("empty"));
+
+  // 默认进入空态页面
+  showView("empty");
 
   // ============ Phase 2: Breast Pump 3-step flow ============
   // state 0 有吸奶数据 x≤12h → tap → state 1 双边不同步韵律 → tap → state 2 结束吸奶 → tap → back to 0
