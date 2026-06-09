@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>设备页 — 空态轮播 Demo</title>
+<style>
+  :root {
+    --bg: #efe9e1;
+    --text: #2b1410;
+    --primary: #3d0b08;
+    --card-yellow: #f4d76b;
+    --card-pink: #f7c8c5;
+    --card-green: #b8d9a4;
+    --shadow: 0 18px 40px -20px rgba(61, 11, 8, 0.35);
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #d8d2ca;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Phone frame */
+  .phone {
+    position: relative;
+    width: 393px;
+    height: 852px;
+    background: var(--bg);
+    border-radius: 44px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.4), 0 0 0 12px #111, 0 0 0 13px #2b2b2b;
+  }
+
+  /* Status bar */
+  .status-bar {
+    position: absolute; inset: 0 0 auto 0;
+    height: 62px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 32px 0;
+    font-size: 16px; font-weight: 600; color: var(--text);
+    z-index: 50;
+    pointer-events: none;
+  }
+  .status-bar .right { display: flex; gap: 6px; align-items: center; }
+  .status-bar .right svg { display: block; }
+
+  /* Pages */
+  .page {
+    position: absolute; inset: 0;
+    transition: transform 420ms cubic-bezier(.25,.8,.3,1), opacity 320ms ease;
+    will-change: transform, opacity;
+    background: var(--bg);
+  }
+  .page.empty { z-index: 10; }
+  .page.detail {
+    z-index: 20;
+    transform: translateY(100%);
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .page.detail.open {
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .detail-inner {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ====== EMPTY STATE ====== */
+  .empty-content {
+    position: absolute; inset: 62px 0 94px 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .top-nav {
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+  }
+  .top-nav h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+    letter-spacing: -0.3px;
+  }
+  .plus-btn {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .plus-btn svg { width: 24px; height: 24px; }
+
+  .hero {
+    text-align: center;
+    margin-top: 30px;
+    padding: 0 32px;
+  }
+  .hero-icon {
+    width: 36px; height: 36px;
+    margin: 0 auto 18px;
+    display: block;
+  }
+  .hero-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.35;
+    margin: 0 0 24px 0;
+    letter-spacing: -0.3px;
+  }
+  .add-btn {
+    background: var(--primary);
+    color: #fff;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 16px 38px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 20px -8px rgba(61, 11, 8, 0.5);
+    transition: transform 0.15s ease;
+  }
+  .add-btn:active { transform: scale(0.96); }
+
+  /* Carousel */
+  .carousel-wrap {
+    flex: 1;
+    position: relative;
+    margin-top: auto;
+    padding-bottom: 24px;
+    overflow: hidden;
+  }
+  .carousel {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    width: 222px;
+    height: 290px;
+    perspective: 1000px;
+    cursor: grab;
+    user-select: none;
+  }
+  .carousel.dragging { cursor: grabbing; }
+
+  .card {
+    position: absolute;
+    top: 0;
+    left: -111px;
+    width: 222px;
+    height: 290px;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 420ms cubic-bezier(.25,.8,.3,1), opacity 320ms ease;
+    will-change: transform, opacity;
+    transform-origin: center bottom;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-img {
+    width: 100%;
+    height: 200px;
+    background: #eee;
+    background-size: cover;
+    background-position: center;
+  }
+  .card-body {
+    flex: 1;
+    padding: 14px 16px 16px;
+    background: var(--card-yellow);
+  }
+  .card[data-color="pink"] .card-body { background: var(--card-pink); }
+  .card[data-color="green"] .card-body { background: var(--card-green); }
+
+  .card-tag {
+    font-size: 11px;
+    color: var(--text);
+    opacity: 0.85;
+    margin: 0 0 4px 0;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.35;
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-style: italic;
+  }
+
+  /* Card positions */
+  .card[data-pos="center"] {
+    transform: translateX(0) scale(1) rotate(0deg);
+    z-index: 30;
+  }
+  .card[data-pos="left"] {
+    transform: translateX(-220px) scale(0.88) rotate(-8deg);
+    z-index: 20;
+  }
+  .card[data-pos="right"] {
+    transform: translateX(220px) scale(0.88) rotate(8deg);
+    z-index: 20;
+  }
+  .card[data-pos="hidden-left"] {
+    transform: translateX(-360px) scale(0.7) rotate(-12deg);
+    opacity: 0;
+    z-index: 10;
+  }
+  .card[data-pos="hidden-right"] {
+    transform: translateX(360px) scale(0.7) rotate(12deg);
+    opacity: 0;
+    z-index: 10;
+  }
+
+  .carousel.dragging .card {
+    transition: none;
+  }
+
+  /* Tab bar */
+  .tab-bar {
+    position: absolute;
+    bottom: 8px; left: 8px; right: 8px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 12px;
+    box-shadow: 0 8px 24px -12px rgba(0,0,0,0.15);
+    z-index: 40;
+  }
+  .tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    color: var(--text);
+    opacity: 0.55;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 22px;
+    transition: opacity 0.2s ease;
+  }
+  .tab.active {
+    opacity: 1;
+    background: rgba(0,0,0,0.06);
+  }
+  .tab svg { width: 22px; height: 22px; }
+  .tab span { font-size: 11px; font-weight: 500; }
+
+  /* ====== DETAIL PAGE ====== */
+  .detail-inner {
+    background: var(--bg);
+    min-height: 100%;
+    padding-bottom: 40px;
+  }
+  .detail-hero {
+    position: relative;
+    width: 100%;
+    height: 363px;
+    overflow: hidden;
+  }
+  .detail-hero-img {
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+  }
+  .detail-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(61,11,8,0.6) 100%);
+  }
+  .close-btn {
+    position: absolute;
+    top: 70px; left: 16px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    z-index: 60;
+    box-shadow: 0 4px 12px -4px rgba(0,0,0,0.2);
+  }
+  .close-btn svg { width: 16px; height: 16px; }
+
+  .detail-title-overlay {
+    position: absolute;
+    bottom: 24px; left: 24px; right: 24px;
+    color: #fff;
+    z-index: 5;
+  }
+  .detail-title-overlay h2 {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1.2;
+    margin: 0;
+    letter-spacing: -0.2px;
+  }
+
+  .detail-quote {
+    background: var(--primary);
+    color: #f5e9d8;
+    padding: 32px 32px 36px;
+    position: relative;
+  }
+  .detail-quote::before {
+    content: '“';
+    position: absolute;
+    top: 12px; left: 24px;
+    font-size: 60px;
+    line-height: 1;
+    color: #b07a4a;
+    font-family: Georgia, serif;
+  }
+  .detail-quote p {
+    margin: 18px 0 0;
+    font-size: 16px;
+    line-height: 1.55;
+    font-weight: 400;
+  }
+  .detail-quote strong { font-weight: 600; }
+
+  .detail-img-2 {
+    width: 100%; height: 271px;
+    background-size: cover; background-position: center;
+  }
+
+  .detail-features {
+    background: var(--primary);
+    color: #f5e9d8;
+    padding: 36px 24px 24px;
+  }
+  .feature-intro {
+    font-size: 16px;
+    line-height: 1.55;
+    margin: 0 0 28px;
+    padding: 0 24px;
+    text-align: center;
+  }
+  .feature {
+    display: flex;
+    gap: 14px;
+    padding: 18px 0;
+    border-top: 1px solid rgba(245,233,216,0.18);
+  }
+  .feature:last-child { border-bottom: 1px solid rgba(245,233,216,0.18); }
+  .feature-icon {
+    width: 32px; height: 32px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #f5e9d8;
+  }
+  .feature-icon svg { width: 24px; height: 24px; }
+  .feature-text h3 {
+    margin: 4px 0 6px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+  }
+  .feature-text p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    opacity: 0.78;
+  }
+
+  /* Page indicator */
+  .indicator {
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 35;
+  }
+  .indicator span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(43,20,16,0.25);
+    transition: all 0.3s ease;
+  }
+  .indicator span.active {
+    background: var(--primary);
+    width: 18px;
+    border-radius: 3px;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="right">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="6" width="3" height="6" rx="0.5"/><rect x="5" y="4" width="3" height="8" rx="0.5"/><rect x="10" y="2" width="3" height="10" rx="0.5"/><rect x="15" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 10c.83 0 1.5.67 1.5 1.5S8.83 13 8 13s-1.5-.67-1.5-1.5S7.17 10 8 10zM3.05 7.05a7 7 0 0 1 9.9 0l-1.06 1.06a5.5 5.5 0 0 0-7.78 0L3.05 7.05zM0 4a11 11 0 0 1 16 0l-1.06 1.06a9.5 9.5 0 0 0-13.88 0L0 4z"/></svg>
+      <svg width="26" height="12" viewBox="0 0 26 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2.5" stroke="currentColor"/><rect x="2" y="2" width="19" height="8" rx="1" fill="currentColor"/><rect x="24" y="4" width="2" height="4" rx="0.5" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- =============== EMPTY STATE PAGE =============== -->
+  <div class="page empty" id="emptyPage">
+    <div class="empty-content">
+
+      <div class="top-nav">
+        <h1>Clara's Family</h1>
+        <button class="plus-btn" aria-label="Add">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+
+      <div class="hero">
+        <svg class="hero-icon" viewBox="0 0 36 36" fill="none" stroke="#3d0b08" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="11" y="9" width="14" height="20" rx="3"/>
+          <path d="M18 25h.01"/>
+          <path d="M27 6c1.2 1.2 1.8 2.8 1.8 4.5M30 4c1.7 1.7 2.7 4 2.7 6.5"/>
+        </svg>
+        <h2 class="hero-title">Connect everything<br>what mom's need</h2>
+        <button class="add-btn">Add Device</button>
+      </div>
+
+      <div class="carousel-wrap">
+        <div class="carousel" id="carousel">
+          <div class="card" data-pos="left" data-color="green" data-id="t31">
+            <div class="card-img" style="background-image:url('pic-t31.png')"></div>
+            <div class="card-body">
+              <p class="card-tag">Portable Digital Sterilizer T31</p>
+              <p class="card-title">Clean, sterile, always.</p>
+            </div>
+          </div>
+          <div class="card" data-pos="center" data-color="yellow" data-id="bm08">
+            <div class="card-img" style="background-image:url('pic-bm08.png')"></div>
+            <div class="card-body">
+              <p class="card-tag">Smart Baby Monitor BM08</p>
+              <p class="card-title">See every moment.<br>Even in the dark.</p>
+            </div>
+          </div>
+          <div class="card" data-pos="right" data-color="pink" data-id="w1">
+            <div class="card-img" style="background-image:url('pic-w1.png')"></div>
+            <div class="card-body">
+              <p class="card-tag">W1 Comfort Pump</p>
+              <p class="card-title">Warm-massage comfort for natural flow.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="indicator" id="indicator">
+          <span></span><span class="active"></span><span></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tab bar -->
+    <div class="tab-bar">
+      <div class="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7v9a2 2 0 0 1-2 2h-4v-7H9v7H5a2 2 0 0 1-2-2v-9z"/></svg>
+        <span>Home</span>
+      </div>
+      <div class="tab active">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.2L19.5 8 12 11.8 4.5 8 12 4.2z"/></svg>
+        <span>Device</span>
+      </div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.2 8.4C19 5.4 16 3.4 12.8 3.4c-2.6 0-5 1.2-6.6 3.2L4 4.6v6h6L7.8 8.4c1.2-1.4 3-2.2 5-2.2 2.4 0 4.6 1.4 5.6 3.6.4.8 1.2 1.2 2 1z"/><path d="M3.8 15.6c1.2 3 4.2 5 7.4 5 2.6 0 5-1.2 6.6-3.2L20 19.4v-6h-6l2.2 2.2c-1.2 1.4-3 2.2-5 2.2-2.4 0-4.6-1.4-5.6-3.6-.4-.8-1.2-1.2-2-1z"/></svg>
+        <span>Community</span>
+      </div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+        <span>Me</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============== DETAIL PAGE =============== -->
+  <div class="page detail" id="detailPage">
+    <button class="close-btn" id="closeBtn" aria-label="Close">
+      <svg viewBox="0 0 16 16" fill="none" stroke="#3d0b08" stroke-width="2" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg>
+    </button>
+    <div class="detail-inner" id="detailInner">
+      <div class="detail-hero">
+        <div class="detail-hero-img" id="detailHero"></div>
+        <div class="detail-title-overlay">
+          <h2 id="detailTitle"></h2>
+        </div>
+      </div>
+
+      <div class="detail-quote">
+        <p id="detailQuote"></p>
+      </div>
+
+      <div class="detail-img-2" id="detailImg2"></div>
+
+      <div class="detail-features">
+        <p class="feature-intro" id="detailIntro"></p>
+        <div id="detailFeatures"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ============ Device data ============
+  const devices = {
+    t31: {
+      name: "Portable Digital Sterilizer T31",
+      title: "Clean, sterile, always — on the go.",
+      hero: "pic-t31.png",
+      img2: "pic-t31.png",
+      quote: "<strong>T31 sterilizes in 59 seconds</strong>, using UVC + ozone to remove 99.9% of bacteria from pacifiers, bottle nipples and small accessories — at home or out.",
+      intro: "Pocket-sized, USB-C rechargeable, parent-grade clean.",
+      features: [
+        { title: "59-second deep clean", desc: "UVC-LED + active ozone reaches every crevice in under a minute." },
+        { title: "Fits in any bag", desc: "Compact capsule shape slips into a diaper bag, purse or stroller pocket." },
+        { title: "One-touch operation", desc: "Press once to start; auto-stop and child-safe lid prevent accidental UV exposure." },
+        { title: "USB-C, all-day battery", desc: "30+ sterilizations per charge — never caught unprepared on a long day out." }
+      ]
+    },
+    bm08: {
+      name: "Smart Baby Monitor BM08",
+      title: "Stay connected to your baby, all night long.",
+      hero: "pic-bm08.png",
+      img2: "pic-bm08.png",
+      quote: "<strong>BM08 offers contact-free</strong> breathing and sleep monitoring with AI-powered alerts, so you can check on your baby in real time.",
+      intro: "AI vision that watches when you can't.",
+      features: [
+        { title: "See your baby clearly through the night", desc: "No need to turn on the lights. 2K live video shows every detail, even in the dark." },
+        { title: "AI alerts when your baby needs attention", desc: "Detects face covering, rolling over and crying, then sends notifications the moment something changes." },
+        { title: "Breathing and sleep monitoring without wearables", desc: "Tracks breathing motion, heart activity and sleep state without anything attached to your baby." },
+        { title: "Automatic soothing when baby starts crying", desc: "Soothing music can play automatically to help calm your baby more quickly." }
+      ]
+    },
+    w1: {
+      name: "W1 Comfort Pump",
+      title: "Comfort that supports natural let-down with warm massage.",
+      hero: "pic-w1.png",
+      img2: "pic-w1.png",
+      quote: "<strong>W1 is designed to make pumping more comfortable,</strong> with warmth and massage that support natural milk flow.",
+      intro: "Designed around how your body actually works.",
+      features: [
+        { title: "Fits comfortably inside your bra", desc: "For near-invisible, hands-free use throughout the day." },
+        { title: "Warming + massage modes", desc: "Gentle heat and rhythmic compression encourage natural let-down." },
+        { title: "Whisper-quiet motor", desc: "Pump in a meeting, on the train, or while baby sleeps — without anyone noticing." },
+        { title: "App-tracked sessions", desc: "Log volume and duration; W1 learns your rhythm and suggests optimal modes." }
+      ]
+    }
+  };
+
+  // ============ Carousel ============
+  const order = ["t31", "bm08", "w1"]; // left, center, right initial
+  let centerIdx = 1; // index in `order` array that is currently center
+  const carousel = document.getElementById("carousel");
+  const cards = Array.from(carousel.querySelectorAll(".card"));
+  const indicator = document.getElementById("indicator");
+
+  function cardById(id) { return cards.find(c => c.dataset.id === id); }
+
+  function render() {
+    const len = order.length;
+    const leftId = order[(centerIdx - 1 + len) % len];
+    const centerId = order[centerIdx];
+    const rightId = order[(centerIdx + 1) % len];
+
+    cards.forEach(card => {
+      const id = card.dataset.id;
+      if (id === centerId) card.dataset.pos = "center";
+      else if (id === leftId) card.dataset.pos = "left";
+      else if (id === rightId) card.dataset.pos = "right";
+      else card.dataset.pos = "hidden-right";
+    });
+
+    // update indicator
+    indicator.innerHTML = "";
+    for (let i = 0; i < len; i++) {
+      const s = document.createElement("span");
+      if (i === centerIdx) s.className = "active";
+      indicator.appendChild(s);
+    }
+  }
+
+  function next() { centerIdx = (centerIdx + 1) % order.length; render(); }
+  function prev() { centerIdx = (centerIdx - 1 + order.length) % order.length; render(); }
+
+  // Drag / swipe
+  let startX = 0, currentX = 0, dragging = false;
+  const SWIPE_THRESHOLD = 50;
+
+  function onStart(e) {
+    dragging = true;
+    carousel.classList.add("dragging");
+    startX = (e.touches ? e.touches[0].clientX : e.clientX);
+    currentX = startX;
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    currentX = (e.touches ? e.touches[0].clientX : e.clientX);
+    const dx = currentX - startX;
+    // mild transient drag visual on center card
+    const center = carousel.querySelector('.card[data-pos="center"]');
+    if (center) {
+      center.style.transform = `translateX(${dx * 0.6}px) scale(${1 - Math.min(Math.abs(dx) / 1000, 0.05)}) rotate(${dx * 0.02}deg)`;
+    }
+  }
+  function onEnd(e) {
+    if (!dragging) return;
+    dragging = false;
+    carousel.classList.remove("dragging");
+    const dx = currentX - startX;
+    // clear inline transform on center card so CSS rule applies again
+    const center = carousel.querySelector('.card[data-pos="center"]');
+    if (center) center.style.transform = "";
+
+    if (Math.abs(dx) > SWIPE_THRESHOLD) {
+      if (dx < 0) next();
+      else prev();
+    }
+  }
+
+  carousel.addEventListener("touchstart", onStart, { passive: true });
+  carousel.addEventListener("touchmove", onMove, { passive: true });
+  carousel.addEventListener("touchend", onEnd);
+  carousel.addEventListener("mousedown", onStart);
+  window.addEventListener("mousemove", onMove);
+  window.addEventListener("mouseup", onEnd);
+
+  // Click on side card → bring to center; click on center card → open detail
+  cards.forEach(card => {
+    card.addEventListener("click", () => {
+      if (dragging || Math.abs(currentX - startX) > 8) return; // ignore drag-end
+      const pos = card.dataset.pos;
+      if (pos === "left") prev();
+      else if (pos === "right") next();
+      else if (pos === "center") openDetail(card.dataset.id);
+    });
+  });
+
+  // Keyboard arrows
+  window.addEventListener("keydown", (e) => {
+    if (document.getElementById("detailPage").classList.contains("open")) {
+      if (e.key === "Escape") closeDetail();
+      return;
+    }
+    if (e.key === "ArrowLeft") prev();
+    if (e.key === "ArrowRight") next();
+    if (e.key === "Enter" || e.key === " ") openDetail(order[centerIdx]);
+  });
+
+  // ============ Detail page ============
+  const detailPage = document.getElementById("detailPage");
+  const detailInner = document.getElementById("detailInner");
+  const detailHero = document.getElementById("detailHero");
+  const detailImg2 = document.getElementById("detailImg2");
+  const detailTitle = document.getElementById("detailTitle");
+  const detailQuote = document.getElementById("detailQuote");
+  const detailIntro = document.getElementById("detailIntro");
+  const detailFeatures = document.getElementById("detailFeatures");
+
+  const featureIcons = [
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22c1.7-3 6-5 6-10a6 6 0 0 0-12 0c0 5 4.3 7 6 10z"/><circle cx="12" cy="12" r="2.2"/></svg>',
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h3l2-7 4 14 2-7 2 4h5"/></svg>',
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>'
+  ];
+
+  function openDetail(id) {
+    const d = devices[id];
+    if (!d) return;
+    detailHero.style.backgroundImage = `url('${d.hero}')`;
+    detailImg2.style.backgroundImage = `url('${d.img2}')`;
+    detailTitle.textContent = d.title;
+    detailQuote.innerHTML = d.quote;
+    detailIntro.textContent = d.intro;
+    detailFeatures.innerHTML = d.features.map((f, i) => `
+      <div class="feature">
+        <div class="feature-icon">${featureIcons[i % featureIcons.length]}</div>
+        <div class="feature-text">
+          <h3>${f.title}</h3>
+          <p>${f.desc}</p>
+        </div>
+      </div>
+    `).join("");
+    detailInner.scrollTop = 0;
+    detailPage.classList.add("open");
+  }
+  function closeDetail() {
+    detailPage.classList.remove("open");
+  }
+  document.getElementById("closeBtn").addEventListener("click", closeDetail);
+
+  // init
+  render();
+</script>
+
+</body>
+</html>
