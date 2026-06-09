@@ -297,7 +297,8 @@
   .p2-dev.cleaning { background: #e5f5e5; border: 1px solid rgba(49,0,13,.05); color: #1a5140; }
   .p2-dev.cleaning .act.btn { background: #1a5140; }
   .p2-dev.toner    { background: #ffeff2; border: 1px solid #ffdde1; color: #770523; }
-  .p2-dev.fd04     { background: #fff7e0; border: 1px solid rgba(132,53,14,.09); color: #84350e; }
+  .p2-dev.t31      { background: linear-gradient(135deg, #cfe9d6 0%, #6fb389 55%, #5ca87c 100%); border: 1px solid rgba(26,81,64,.10); color: #1a5140; }
+  .p2-dev.t31 .tile { background: rgba(255,255,255,0.9); box-shadow: inset 0 0 0 1px #fff; }
   .p2-dev.offline  { background: #fff; border: 1px solid #eceaef; color: #1b1821; }
   .p2-dev.offline .tile { background: #f8f7f9; }
   .p2-dev.offline .tile img { opacity: .5; }
@@ -571,6 +572,19 @@
   .card-sm.green .meta { color: #1e3a30; opacity: 0.75; }
   .card-sm.pink .meta { color: #3d0b08; opacity: 0.85; }
   .card-sm-info .meta svg { width: 14px; height: 14px; }
+
+  /* ===== T31 体温贴（看板3 设备页_一期：薄荷绿渐变 #5ca87c / 深绿字 #1a5140）===== */
+  .card-sm.t31 {
+    background: linear-gradient(135deg, #cfe9d6 0%, #6fb389 55%, #5ca87c 100%);
+  }
+  .card-sm.t31 h3 { color: #1a5140; }
+  .card-sm.t31 .meta { color: #1a5140; opacity: 0.92; }
+  .card-sm.t31 .card-sm-action.arrow { color: #1a5140; opacity: 0.5; }
+  .card-sm-thumb.t31-thumb {
+    background-color: rgba(255,255,255,0.9);
+    box-shadow: inset 0 0 0 1px #fff;
+    background-size: 80% auto;
+  }
 
   /* ===== M5 Smart (双主机系列) — 按设计图 ===== */
   .card-sm.m5.pink { background: #ffeff2; border: 1px solid #ffdde1; }
@@ -1426,11 +1440,15 @@
           </div>
         </div>
 
-        <!-- 6. FD04 (yellow, 128px) -->
-        <div class="card-sm yellow" data-id="fd04">
-          <div class="card-sm-thumb product-tall" style="background-image:url('fd04-device.png')"></div>
+        <!-- 6. T31 体温贴 (绿色, 按看板3) -->
+        <div class="card-sm t31" data-id="t31">
+          <div class="card-sm-thumb t31-thumb" style="background-image:url('prod-t31.png')"></div>
           <div class="card-sm-info">
-            <h3>FD04</h3>
+            <h3>T31</h3>
+            <span class="meta">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 1.5a1.5 1.5 0 0 1 1.5 1.5v4.6a2.6 2.6 0 1 1-3 0V3A1.5 1.5 0 0 1 7 1.5z"/><circle cx="7" cy="9.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+              93.67°F
+            </span>
           </div>
           <div class="card-sm-action arrow">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
@@ -1684,12 +1702,16 @@
           <span class="act chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
         </div>
 
-        <!-- 5. FD04 Formula maker -->
-        <div class="p2-dev fd04">
+        <!-- 5. T31 体温贴（看板3） -->
+        <div class="p2-dev t31">
           <div class="left">
-            <div class="tile"><img src="prod-fd04.png" alt="FD04"></div>
+            <div class="tile"><img src="prod-t31.png" alt="T31"></div>
             <div class="txt">
-              <span class="name">FD04</span>
+              <span class="name">T31</span>
+              <span class="sub">
+                <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M7 1.5a1.5 1.5 0 0 1 1.5 1.5v4.6a2.6 2.6 0 1 1-3 0V3A1.5 1.5 0 0 1 7 1.5z"/><circle cx="7" cy="9.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+                93.67°F
+              </span>
             </div>
           </div>
           <span class="act chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
