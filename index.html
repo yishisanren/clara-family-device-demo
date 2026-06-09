@@ -936,13 +936,21 @@
   #pumpPage .imgpage-scroll { background: #f6ece4; }
   #monitorPage .imgpage-scroll { background: #e9e2fb; }
   .imgpage-shot { display: block; width: 100%; height: auto; }
-  /* 透明返回热区：叠在截图导航栏左侧的原返回箭头上 */
+  /* 透明返回热区：叠在截图导航栏左侧的原返回箭头上。
+     button 默认样式全部清掉，避免黑边/聚焦框。
+     位置对准导航栏返回箭头：图内导航栏约在顶部 56~104px 区间 */
   .imgpage-back {
+    display: block; -webkit-appearance: none; appearance: none;
+    border: 0; outline: none; padding: 0; margin: 0; box-shadow: none;
+    -webkit-tap-highlight-color: transparent;
     position: absolute; left: 0; z-index: 5;
-    top: env(safe-area-inset-top); width: 64px; height: 56px; cursor: pointer;
+    top: calc(env(safe-area-inset-top) + 56px);
+    width: 64px; height: 48px; cursor: pointer;
     background: transparent;
+    border-radius: 12px;
   }
-  .imgpage-back:active { background: rgba(0,0,0,0.05); }
+  .imgpage-back:focus { outline: none; }
+  .imgpage-back:active { background: rgba(0,0,0,0.08); }
   .imgpage-back svg { display: none; }
   .sub-nav {
     position: absolute; left: 0; right: 0; top: 0;
@@ -1396,7 +1404,7 @@
           <div class="card-sm-thumb" style="background-image:url('asset-cleaning.png')"></div>
           <div class="card-sm-info">
             <h3>Cleaning Machine</h3>
-            <span class="meta">Playing</span>
+            <span class="meta">Cleaning</span>
           </div>
           <div class="card-sm-action pause">
             <svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="5" width="3.5" height="14" rx="1"/><rect x="13.5" y="5" width="3.5" height="14" rx="1"/></svg>
@@ -1658,7 +1666,7 @@
             <div class="tile"><img src="prod-cleaning.png" alt="Cleaning Machine"></div>
             <div class="txt">
               <span class="name">Cleaning Machine</span>
-              <span class="sub">Playing</span>
+              <span class="sub">Cleaning</span>
             </div>
           </div>
           <span class="act btn"><i></i><i></i></span>
@@ -1826,19 +1834,18 @@
   <!-- 看板4 吸奶器页面 — 整图还原（只读，仅返回） -->
   <div class="page subpage imgpage" id="pumpPage">
     <div class="imgpage-scroll">
+      <!-- 透明返回热区，叠在截图原返回箭头上（放滚动层内，避免触摸被吞） -->
+      <button type="button" class="imgpage-back" data-close-sub aria-label="返回"></button>
       <img class="imgpage-shot" src="board4-pump.png" alt="Breast Pump">
     </div>
-    <!-- 透明返回热区，叠在截图原返回箭头上 -->
-    <span class="imgpage-back" data-close-sub aria-label="返回"></span>
   </div>
 
   <!-- 看板4 BBM / Baby Monitor 页面 — 整图还原（只读，仅返回） -->
   <div class="page subpage imgpage" id="monitorPage">
     <div class="imgpage-scroll">
+      <button type="button" class="imgpage-back" data-close-sub aria-label="返回"></button>
       <img class="imgpage-shot" src="board4-monitor.png" alt="Baby Monitor">
     </div>
-    <!-- 透明返回热区，叠在截图原返回箭头上 -->
-    <span class="imgpage-back" data-close-sub aria-label="返回"></span>
   </div>
 
   <!-- =============== DETAIL PAGE =============== -->
