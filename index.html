@@ -145,6 +145,121 @@
   .p2-card.static { cursor: default; }
   .p2-card.static:active { transform: none; }
 
+  /* === Breast-Pump CSS cards (vector-crisp, per Figma 1:1909 / 1:1855 / 1:1812) === */
+  .pump {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 361 / 279;
+    border-radius: 24px;
+    overflow: hidden;
+    color: #770523;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .pump-12h  { background: #ffedf1; border: 1px solid #ffdde1; }
+  .pump-rhythm, .pump-end { background: #ffdde1; border: 1px solid #ffdde1; }
+  /* decorative soft circles for rhythm/end */
+  .pump-deco { position: absolute; border-radius: 50%; pointer-events: none; }
+  .pump-end .pump-deco.tr, .pump-rhythm .pump-deco.tr {
+    width: 60%; aspect-ratio: 1; right: -14%; top: -52%;
+    background: radial-gradient(circle, rgba(255,255,255,.5), rgba(255,255,255,0) 70%);
+  }
+  .pump-end .pump-deco.bl, .pump-rhythm .pump-deco.bl {
+    width: 30%; aspect-ratio: 1; left: -12%; bottom: -28%;
+    background: radial-gradient(circle, rgba(255,255,255,.45), rgba(255,255,255,0) 70%);
+  }
+  /* shared header */
+  .pump-head {
+    position: absolute; left: 4.15%; top: 6.8%;
+    display: flex; align-items: center; gap: 12px; z-index: 3;
+  }
+  .pump-ico {
+    width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+    background: linear-gradient(to bottom, rgba(255,192,203,.8), rgba(255,199,192,.8));
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pump-ico svg { width: 17px; height: 19px; }
+  .pump-title { font-size: 16px; font-weight: 600; letter-spacing: -0.1px; }
+  .pump-tag {
+    font-size: 12px; color: #240f1b;
+    border: 1px solid rgba(119,5,35,.12); border-radius: 8px;
+    padding: 2px 8px; line-height: 18px;
+  }
+  .pump-chevron {
+    position: absolute; right: 4.4%; top: 9%; z-index: 3; color: #770523; opacity: .85;
+  }
+  .pump-chevron svg { width: 22px; height: 22px; }
+  .pump-pause {
+    position: absolute; right: 4.4%; top: 6%; z-index: 3;
+    width: 40px; height: 40px; border-radius: 50%; background: #770523;
+    display: flex; align-items: center; justify-content: center; gap: 3px;
+  }
+  .pump-pause i { width: 5px; height: 12px; border-radius: 2px; background: #fff; display: block; }
+
+  /* 12h card body */
+  .pump-12h .pump-last { position: absolute; left: 4.15%; top: 19.7%; }
+  .pump-12h .pump-last .lbl { font-size: 12px; opacity: .7; margin-bottom: 14px; }
+  .pump-12h .pump-big { display: flex; align-items: baseline; gap: 4px; }
+  .pump-12h .pump-big .n { font-size: 40px; font-weight: 300; line-height: 1; }
+  .pump-12h .pump-big .u { font-size: 16px; }
+  .pump-12h .pump-big + .pump-big { margin-left: 3px; }
+  .pump-12h .pump-bigrow { display: flex; align-items: baseline; }
+  .pump-12h .pump-stats {
+    position: absolute; left: 4.15%; bottom: 11%;
+    display: flex; gap: 34px; font-size: 12px;
+  }
+  .pump-12h .pump-stats .k { opacity: .7; margin-bottom: 8px; }
+  .pump-mother {
+    position: absolute; right: 0; bottom: 0; width: 59%;
+    pointer-events: none;
+  }
+  .pump-mother img { width: 100%; display: block; }
+
+  /* rhythm card */
+  .pump-rings {
+    position: absolute; left: 0; right: 0; top: 29%;
+    display: flex; justify-content: center; gap: 11%;
+  }
+  .pump-ring {
+    position: relative; width: 37.6%; aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pump-ring svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .pump-ring .t { font-size: 24px; font-weight: 300; }
+  .pump-foot {
+    position: absolute; left: 50%; transform: translateX(-50%); bottom: 7.5%;
+    width: 91%; display: flex; align-items: center; justify-content: space-between;
+    font-size: 12px;
+  }
+  .pump-foot .seg { display: flex; align-items: center; gap: 8px; }
+  .pump-bat {
+    width: 18px; height: 10px; border-radius: 2px; position: relative;
+    border: 1px solid rgba(119,5,35,.5);
+  }
+  .pump-bat::after {
+    content: ''; position: absolute; right: -3px; top: 3px; width: 2px; height: 4px;
+    background: rgba(119,5,35,.5); border-radius: 0 1px 1px 0;
+  }
+  .pump-bat i { position: absolute; inset: 1.5px; width: 70%; background: #770523; border-radius: 1px; }
+
+  /* end card */
+  .pump-done {
+    position: absolute; left: 50%; transform: translateX(-50%); top: 29%;
+    width: 207px; max-width: 80%;
+    display: flex; flex-direction: column; align-items: center; gap: 20px;
+  }
+  .pump-done .grp { display: flex; flex-direction: column; align-items: center; gap: 9px; }
+  .pump-done .flower svg { width: 32px; height: 32px; }
+  .pump-done .h {
+    font-family: "Iowan Old Style", Georgia, "Times New Roman", serif;
+    font-size: 24px; line-height: 1.1; text-align: center;
+  }
+  .pump-done .p { font-size: 14px; text-align: center; line-height: 1.2; }
+  .pump-done .btn {
+    background: #3e0010; color: #fff7f8; font-size: 16px; font-weight: 500;
+    height: 48px; padding: 0 28px; border-radius: 32px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
   /* === DEVICES LIST PAGE (per Figma 14691:29285) === */
   .devices-content {
     position: absolute; inset: 62px 0 94px 0;
@@ -1108,10 +1223,94 @@
       </div>
 
       <div class="p2-scroll">
-        <!-- 1. Breast Pump — three-state interactive card -->
+        <!-- 1. Breast Pump — three-state interactive card (CSS-rebuilt, vector crisp) -->
         <!--    state 0: 有吸奶数据 x≤12h → tap → state 1: 双边不同步韵律 → tap → state 2: 结束吸奶 -->
         <div class="p2-card" id="pumpCard">
-          <img id="pumpImg" src="p2-card-12h.png" alt="Breast Pump">
+
+          <!-- state 0: 有吸奶数据 x≤12h -->
+          <div class="pump pump-12h" data-step="0">
+            <div class="pump-head">
+              <span class="pump-ico">
+                <svg viewBox="0 0 17 19" fill="none" stroke="#770523" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2h7l-1.2 7.5a3.3 3.3 0 0 1-3.3 2.8h0a3.3 3.3 0 0 1-3.3-2.8L3 2h2z"/><path d="M8.5 12.3V17M5.5 17h6"/></svg>
+              </span>
+              <span class="pump-title">Breast Pump</span>
+              <span class="pump-tag">3 Devices</span>
+            </div>
+            <span class="pump-chevron">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+            </span>
+            <div class="pump-last">
+              <div class="lbl">Last Pump</div>
+              <div class="pump-bigrow">
+                <span class="pump-big"><span class="n">1</span><span class="u">h</span></span>
+                <span class="pump-big"><span class="n">45</span><span class="u">m ago</span></span>
+              </div>
+            </div>
+            <div class="pump-stats">
+              <div><div class="k">Last Time</div><div>09:35am</div></div>
+              <div><div class="k">Last Volume</div><div>680ml</div></div>
+            </div>
+            <div class="pump-mother"><img src="illus-mother.png" alt=""></div>
+          </div>
+
+          <!-- state 1: 双边不同步-韵律模式 -->
+          <div class="pump pump-rhythm" data-step="1" hidden>
+            <span class="pump-deco tr"></span><span class="pump-deco bl"></span>
+            <div class="pump-head">
+              <span class="pump-ico">
+                <svg viewBox="0 0 17 19" fill="none" stroke="#770523" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2h7l-1.2 7.5a3.3 3.3 0 0 1-3.3 2.8h0a3.3 3.3 0 0 1-3.3-2.8L3 2h2z"/><path d="M8.5 12.3V17M5.5 17h6"/></svg>
+              </span>
+              <span class="pump-title">Breast Pump</span>
+            </div>
+            <span class="pump-pause"><i></i><i></i></span>
+            <div class="pump-rings">
+              <div class="pump-ring">
+                <svg viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(119,5,35,0.18)" stroke-width="2" stroke-dasharray="1 5" stroke-linecap="round"/>
+                  <circle cx="50" cy="50" r="47" fill="none" stroke="#770523" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="195 295" transform="rotate(-90 50 50)"/>
+                </svg>
+                <span class="t">13:00</span>
+              </div>
+              <div class="pump-ring">
+                <svg viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(119,5,35,0.18)" stroke-width="2" stroke-dasharray="1 5" stroke-linecap="round"/>
+                  <circle cx="50" cy="50" r="47" fill="none" stroke="#770523" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="120 295" transform="rotate(-90 50 50)"/>
+                </svg>
+                <span class="t">10:00</span>
+              </div>
+            </div>
+            <div class="pump-foot">
+              <span class="seg">L <span class="pump-bat"><i></i></span></span>
+              <span>M9 Pro</span>
+              <span class="seg">R <span class="pump-bat"><i></i></span></span>
+            </div>
+          </div>
+
+          <!-- state 2: 结束吸奶 -->
+          <div class="pump pump-end" data-step="2" hidden>
+            <span class="pump-deco tr"></span><span class="pump-deco bl"></span>
+            <div class="pump-head">
+              <span class="pump-ico">
+                <svg viewBox="0 0 17 19" fill="none" stroke="#770523" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2h7l-1.2 7.5a3.3 3.3 0 0 1-3.3 2.8h0a3.3 3.3 0 0 1-3.3-2.8L3 2h2z"/><path d="M8.5 12.3V17M5.5 17h6"/></svg>
+              </span>
+              <span class="pump-title">Breast Pump</span>
+              <span class="pump-tag">3 Devices</span>
+            </div>
+            <span class="pump-chevron">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+            </span>
+            <div class="pump-done">
+              <div class="grp">
+                <span class="flower">
+                  <svg viewBox="0 0 32 32" fill="#770523"><path d="M16 9c1.3-3 5.5-2.4 5.2.8 3-1.3 5 2.4 2.4 4.3 3 .6 2.4 5-0.9 4.6 1.4 2.8-2.4 4.8-4.3 2.3-.6 3-5 2.9-5-.4-1.9 2.6-5.6.6-4.4-2.3-3.2.4-4-3.9-1-4.7-2.7-1.8-1-1-5.3 2.2-4.5C12.4 6.7 15-.3 16 9z"/><circle cx="16" cy="16" r="3.4" fill="#ffdde1"/></svg>
+                </span>
+                <div class="h">You did it, mama.</div>
+                <div class="p">Another bottle, made with love.</div>
+              </div>
+              <div class="btn">Details</div>
+            </div>
+          </div>
+
         </div>
 
         <!-- 2. BBM Baby Monitor -->
@@ -1536,14 +1735,16 @@
   // state 0 有吸奶数据 x≤12h → tap → state 1 双边不同步韵律 → tap → state 2 结束吸奶 → tap → back to 0
   (() => {
     const card = document.getElementById("pumpCard");
-    const img  = document.getElementById("pumpImg");
-    if (!card || !img) return;
-    const states = ["p2-card-12h.png", "p2-card-rhythm.png", "p2-card-end.png"];
+    if (!card) return;
+    const steps = Array.from(card.querySelectorAll(".pump[data-step]"));
+    if (!steps.length) return;
     let step = 0;
+    const render = () => steps.forEach((el, i) => { el.hidden = (i !== step); });
     card.addEventListener("click", () => {
-      step = (step + 1) % states.length;
-      img.src = states[step];
+      step = (step + 1) % steps.length;
+      render();
     });
+    render();
   })();
 
   // ============ BBM card interactive state machine (per Figma 看板 3) ============
