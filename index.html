@@ -22,6 +22,7 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
     background: var(--bg);
     min-height: 100vh;
+    min-height: 100dvh;
     overflow: hidden;
   }
 
@@ -30,6 +31,7 @@
     position: relative;
     width: 100vw;
     height: 100vh;
+    height: 100dvh; /* dynamic viewport; excludes browser chrome correctly */
     background: var(--bg);
     overflow: hidden;
   }
@@ -247,7 +249,8 @@
   /* Tab bar */
   .tab-bar {
     position: absolute;
-    bottom: calc(8px + env(safe-area-inset-bottom)); left: 8px; right: 8px;
+    bottom: calc(8px + env(safe-area-inset-bottom));
+    left: 8px; right: 8px;
     height: 64px;
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(20px);
