@@ -12,6 +12,9 @@
     --card-yellow: #f4d76b;
     --card-pink: #f7c8c5;
     --card-green: #b8d9a4;
+    --card-purple: #d8c9e3;
+    --card-gray: #cfcfd0;
+    --card-beige: #e5dac9;
     --shadow: 0 18px 40px -20px rgba(61, 11, 8, 0.35);
   }
 
@@ -375,6 +378,17 @@
   }
   .card[data-color="pink"] .card-body { background: var(--card-pink); }
   .card[data-color="green"] .card-body { background: var(--card-green); }
+  .card[data-color="purple"] .card-body { background: var(--card-purple); }
+  .card[data-color="gray"] .card-body { background: var(--card-gray); }
+  .card[data-color="beige"] .card-body { background: var(--card-beige); }
+  .card[data-color="gray"] .card-img { background: #b8b8ba; display: flex; align-items: center; justify-content: center; }
+  .v3-placeholder p {
+    margin: 0;
+    text-align: center;
+    color: #7a6e7e;
+    font-size: 13px;
+    line-height: 1.45;
+  }
 
   .card-tag {
     font-size: 11px;
@@ -740,31 +754,54 @@
 
       <div class="carousel-wrap">
         <div class="carousel" id="carousel">
-          <div class="card" data-pos="left" data-color="green" data-id="t31">
-            <div class="card-img" style="background-image:url('pic-t31.png')"></div>
+          <div class="card" data-pos="hidden-left" data-color="pink" data-id="w1">
+            <div class="card-img" style="background-image:url('pic-w1.png')"></div>
             <div class="card-body">
-              <p class="card-tag">Portable Digital Sterilizer T31</p>
-              <p class="card-title">Clean, sterile, always.</p>
+              <p class="card-tag">W1 Comfort Pump System</p>
+              <p class="card-title">Warm massage comfort for natural flow.</p>
             </div>
           </div>
-          <div class="card" data-pos="center" data-color="yellow" data-id="bm08">
+          <div class="card" data-pos="left" data-color="purple" data-id="air1">
+            <div class="card-img" style="background-image:url('pic-air1.png')"></div>
+            <div class="card-body">
+              <p class="card-tag">Air1 Wearable Pump</p>
+              <p class="card-title">Slim, elegant pumping anywhere.</p>
+            </div>
+          </div>
+          <div class="card" data-pos="center" data-color="gray" data-id="v3">
+            <div class="card-img v3-placeholder">
+              <p>设备未上市<br>配图待定</p>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">V3 Smart Pump System</p>
+              <p class="card-title">Turn any room into a sleep space.</p>
+            </div>
+          </div>
+          <div class="card" data-pos="right" data-color="yellow" data-id="bm08">
             <div class="card-img" style="background-image:url('pic-bm08.png')"></div>
             <div class="card-body">
               <p class="card-tag">Smart Baby Monitor BM08</p>
-              <p class="card-title">See every moment.<br>Even in the dark.</p>
+              <p class="card-title">See every moment. Even in the dark.</p>
             </div>
           </div>
-          <div class="card" data-pos="right" data-color="pink" data-id="w1">
-            <div class="card-img" style="background-image:url('pic-w1.png')"></div>
+          <div class="card" data-pos="hidden-right" data-color="green" data-id="wn02">
+            <div class="card-img" style="background-image:url('pic-wn02.png')"></div>
             <div class="card-body">
-              <p class="card-tag">W1 Comfort Pump</p>
-              <p class="card-title">Warm-massage comfort for natural flow.</p>
+              <p class="card-tag">Sleep Sound Machine WN02</p>
+              <p class="card-title">Turn any room into a sleep space.</p>
+            </div>
+          </div>
+          <div class="card" data-pos="hidden-right" data-color="beige" data-id="t31">
+            <div class="card-img" style="background-image:url('pic-t31.png')"></div>
+            <div class="card-body">
+              <p class="card-tag">Wearable Digital Thermometer T31</p>
+              <p class="card-title">Every reading, always in view.</p>
             </div>
           </div>
         </div>
 
         <div class="indicator" id="indicator">
-          <span></span><span class="active"></span><span></span>
+          <span></span><span></span><span class="active"></span><span></span><span></span><span></span>
         </div>
       </div>
 
@@ -826,111 +863,89 @@
 </div>
 
 <script>
-  // ============ Device data ============
+  // ============ Device data (per Figma board 1, file Znc2vufEoflEkTQ4wxsF2C) ============
   const devices = {
-    t31: {
-      name: "Portable Digital Sterilizer T31",
-      title: "Clean, sterile, always — on the go.",
-      hero: "pic-t31.png",
-      img2: "pic-t31.png",
-      quote: "<strong>T31 sterilizes in 59 seconds</strong>, using UVC + ozone to remove 99.9% of bacteria from pacifiers, bottle nipples and small accessories — at home or out.",
-      intro: "Pocket-sized, USB-C rechargeable, parent-grade clean.",
-      features: [
-        { title: "59-second deep clean", desc: "UVC-LED + active ozone reaches every crevice in under a minute." },
-        { title: "Fits in any bag", desc: "Compact capsule shape slips into a diaper bag, purse or stroller pocket." },
-        { title: "One-touch operation", desc: "Press once to start; auto-stop and child-safe lid prevent accidental UV exposure." },
-        { title: "USB-C, all-day battery", desc: "30+ sterilizations per charge — never caught unprepared on a long day out." }
-      ]
-    },
-    bm08: {
-      name: "Smart Baby Monitor BM08",
-      title: "Stay connected to your baby, all night long.",
-      hero: "pic-bm08.png",
-      img2: "pic-bm08.png",
-      quote: "<strong>BM08 offers contact-free</strong> breathing and sleep monitoring with AI-powered alerts, so you can check on your baby in real time.",
-      intro: "AI vision that watches when you can't.",
-      features: [
-        { title: "See your baby clearly through the night", desc: "No need to turn on the lights. 2K live video shows every detail, even in the dark." },
-        { title: "AI alerts when your baby needs attention", desc: "Detects face covering, rolling over and crying, then sends notifications the moment something changes." },
-        { title: "Breathing and sleep monitoring without wearables", desc: "Tracks breathing motion, heart activity and sleep state without anything attached to your baby." },
-        { title: "Automatic soothing when baby starts crying", desc: "Soothing music can play automatically to help calm your baby more quickly." }
-      ]
-    },
     w1: {
-      name: "W1 Comfort Pump",
-      title: "Comfort that supports natural let-down with warm massage.",
+      name: "W1 Comfort Pump System",
+      title: "Comfort that supports natural let-down with warm massage",
       hero: "pic-w1.png",
       img2: "pic-w1.png",
       quote: "<strong>W1 is designed to make pumping more comfortable,</strong> with warmth and massage that support natural milk flow.",
-      intro: "Designed around how your body actually works.",
       features: [
-        { title: "Fits comfortably inside your bra", desc: "For near-invisible, hands-free use throughout the day." },
-        { title: "Warming + massage modes", desc: "Gentle heat and rhythmic compression encourage natural let-down." },
-        { title: "Whisper-quiet motor", desc: "Pump in a meeting, on the train, or while baby sleeps — without anyone noticing." },
-        { title: "App-tracked sessions", desc: "Log volume and duration; W1 learns your rhythm and suggests optimal modes." }
+        { title: "Warm compress and rhythmic massage to support faster let-down", desc: "Helps encourage milk flow earlier in the session for a smoother, more efficient pumping experience." },
+        { title: "Hands-free wearable design for everyday flexibility", desc: "Pump while resting at home, shopping, working, or moving through your day." },
+        { title: "Automatic safety shut-off", desc: "Stops sessions automatically after extended use to prevent overstimulation." },
+        { title: "Smart consumable tracking and reminders", desc: "Tracks parts and usage cycles to help maintain consistent performance." }
       ]
     },
     air1: {
       name: "Air1 Wearable Pump",
-      title: "Freedom to pump anywhere with a slim, wearable design.",
-      hero: "pic-w1.png",
-      img2: "pic-w1.png",
-      quote: "<strong>Air1 is designed for discreet, on-the-go pumping</strong> without interrupting your daily routine.",
-      intro: "Pump anywhere — at work, on a walk, while shopping.",
+      title: "Freedom to pump anywhere with a slim, wearable design",
+      hero: "pic-air1.png",
+      img2: "pic-air1.png",
+      quote: "<strong>Air1 is designed for discreet,</strong> on-the-go pumping without interrupting your daily routine.",
       features: [
-        { title: "Ultra-slim wearable design", desc: "Truly discreet, fits inside your bra without a visible bulge." },
-        { title: "Long battery life", desc: "Keeps your pump charged and ready whenever you need it." },
-        { title: "Stim → Express auto switch", desc: "Helps encourage milk flow earlier for a smoother, more efficient session." },
-        { title: "Live in your day", desc: "Pump while resting at home, shopping, working, or moving through your day." }
+        { title: "Ultra-slim wearable design for truly discreet pumping", desc: "Fits comfortably inside your bra for near-invisible, hands-free use." },
+        { title: "Portable charging case for all-day freedom", desc: "Keeps your pump charged and ready whenever you need it." },
+        { title: "Leak detection and tilt protection", desc: "Helps prevent spills and alerts abnormal positioning during use." },
+        { title: "Smart maintenance reminders", desc: "Notifies when parts need replacement to help maintain reliable performance." }
       ]
     },
-    thermo: {
-      name: "Smart Thermometer",
-      title: "Round-the-clock body temperature, gently.",
-      hero: "pic-bm08.png",
-      img2: "pic-bm08.png",
-      quote: "<strong>Continuous skin-temperature sensing</strong> with smart alerts the moment a fever starts to rise.",
-      intro: "Wearable patch, hospital-grade accuracy.",
+    v3: {
+      name: "V3 Smart Pump System",
+      title: "Coming soon",
+      hero: "",
+      img2: "",
+      quote: "<strong>V3 Smart Pump System</strong> is not yet available — full preview is still in development.",
       features: [
-        { title: "Continuous monitoring", desc: "Updates every minute over Bluetooth Low Energy — never lose track at night." },
-        { title: "Fever alerts", desc: "Get a notification the moment temperature crosses a threshold you set." },
-        { title: "5-day battery", desc: "One coin-cell lasts a full sickness cycle and beyond." },
-        { title: "Skin-safe adhesive", desc: "Hypoallergenic medical-grade patch designed for sensitive baby skin." }
+        { title: "Device not yet released", desc: "This device is shown as a placeholder. Full content will be available at launch." }
       ]
     },
-    env: {
-      name: "Air Quality Sensor",
-      title: "A clean nursery, measured every minute.",
+    bm08: {
+      name: "Smart Baby Monitor BM08",
+      title: "Stay connected to your baby, all night long",
       hero: "pic-bm08.png",
       img2: "pic-bm08.png",
-      quote: "<strong>PM2.5, CO₂, VOC and humidity</strong> all in one quiet little box — so you know the air your baby breathes.",
-      intro: "See, learn, and improve nursery air over time.",
+      quote: "<strong>BM08 offers contact-free</strong> breathing and sleep monitoring with AI-powered alerts, so you can check on your baby in real time.",
       features: [
-        { title: "Multi-sensor in one device", desc: "PM2.5, CO₂, VOC, temperature, humidity — full picture, single source." },
-        { title: "Smart auto-purify", desc: "Talks to compatible purifiers and fans to act before levels rise." },
-        { title: "Historical trends", desc: "See how the air changes through the day, week, and seasons." },
-        { title: "Whisper-quiet & always on", desc: "Designed to live silently in the nursery 24/7." }
+        { title: "See your baby clearly through the night", desc: "No need to turn on the lights. 2K live video shows your baby clearly — even in the dark. See movements, wake-ups, sleep in real time." },
+        { title: "AI alerts when your baby needs attention", desc: "Detects face covering, rolling over, and crying, then sends notifications the moment something changes." },
+        { title: "Breathing and sleep monitoring without wearables", desc: "Tracks breathing motion, heart activity, and sleep state without anything attached to your baby." },
+        { title: "Automatic soothing when baby starts crying", desc: "Soothing music can play automatically to help calm your baby more quickly." }
       ]
     },
-    hum: {
-      name: "Humidity Sensor",
-      title: "Just-right humidity, all night long.",
-      hero: "pic-bm08.png",
-      img2: "pic-bm08.png",
-      quote: "<strong>Babies sleep better in 45–55% humidity.</strong> The sensor watches it for you and nudges the humidifier when needed.",
-      intro: "One sensor. Perfect nursery air. No more guessing.",
+    wn02: {
+      name: "Sleep Sound Machine WN02",
+      title: "A calmer night, every night",
+      hero: "pic-wn02.png",
+      img2: "pic-wn02.png",
+      quote: "<strong>WN02 combines sound, light, and automation</strong> to help build a calmer bedtime routine.",
       features: [
-        { title: "Precision humidity tracking", desc: "Calibrated to ±2% accuracy in the comfort range." },
-        { title: "Smart humidifier control", desc: "Pairs with compatible humidifiers to keep the room within your target range." },
-        { title: "Quiet sleep mode", desc: "No status lights or beeps after lights-out." },
-        { title: "Battery-free option", desc: "Plug it in or use a long-life coin cell — your choice." }
+        { title: "34 soothing sound options for sleep and relaxation", desc: "Includes white noise, fan sounds, lullabies, and natural sounds to block distractions." },
+        { title: "7-color night light for gentle illumination", desc: "Provides soft lighting for feeding, soothing, and bedtime comfort." },
+        { title: "App control for sound and light settings", desc: "Easily adjust volume, sound type, and lighting from your phone via Wi-Fi." },
+        { title: "Custom sleep routines and schedules", desc: "Set automated bedtime routines so the device runs consistently every night." }
+      ]
+    },
+    t31: {
+      name: "Wearable Digital Thermometer T31",
+      title: "Measured with precision, made for peace of mind",
+      hero: "pic-t31.png",
+      img2: "pic-t31.png",
+      quote: "<strong>T31 continuously monitors your baby's body temperature</strong> and helps you respond quickly to changes.",
+      features: [
+        { title: "Accurate temperature tracking with clear trend insights", desc: "High-precision sensors track temperature changes continuously and automatically generate easy-to-read trends in the app." },
+        { title: "Instant alerts for abnormal temperature changes", desc: "Receive notifications immediately when temperature rises beyond the normal range." },
+        { title: "Soft, wearable design for comfortable overnight monitoring", desc: "Gentle underarm placement allows continuous monitoring during natural sleep without disrupting rest." },
+        { title: "Long battery life with multi-user tracking", desc: "Supports extended monitoring sessions and lets parents manage multiple children in one app." }
       ]
     }
   };
 
   // ============ Carousel ============
-  const order = ["t31", "bm08", "w1"]; // left, center, right initial
-  let centerIdx = 1; // index in `order` array that is currently center
+  // 6 cards from Figma Board 1: W1, Air1, V3, BM08, WN02, T31
+  const order = ["w1", "air1", "v3", "bm08", "wn02", "t31"];
+  let centerIdx = 2; // start at V3 (center of 6)
   const carousel = document.getElementById("carousel");
   const cards = Array.from(carousel.querySelectorAll(".card"));
   const indicator = document.getElementById("indicator");
@@ -939,15 +954,24 @@
 
   function render() {
     const len = order.length;
-    const leftId = order[(centerIdx - 1 + len) % len];
-    const centerId = order[centerIdx];
-    const rightId = order[(centerIdx + 1) % len];
+    const idAt = (offset) => order[(centerIdx + offset + len) % len];
+    const leftId = idAt(-1);
+    const centerId = idAt(0);
+    const rightId = idAt(1);
 
+    // For cards beyond left/center/right, classify as hidden on the side they
+    // are closest to (so the next swipe brings them in from that side).
     cards.forEach(card => {
       const id = card.dataset.id;
-      if (id === centerId) card.dataset.pos = "center";
-      else if (id === leftId) card.dataset.pos = "left";
-      else if (id === rightId) card.dataset.pos = "right";
+      const idx = order.indexOf(id);
+      let diff = idx - centerIdx;
+      // wrap to [-len/2, len/2]
+      if (diff > len / 2) diff -= len;
+      if (diff < -len / 2) diff += len;
+      if (diff === 0) card.dataset.pos = "center";
+      else if (diff === -1) card.dataset.pos = "left";
+      else if (diff === 1) card.dataset.pos = "right";
+      else if (diff < 0) card.dataset.pos = "hidden-left";
       else card.dataset.pos = "hidden-right";
     });
 
@@ -1047,11 +1071,15 @@
   function openDetail(id) {
     const d = devices[id];
     if (!d) return;
-    detailHero.style.backgroundImage = `url('${d.hero}')`;
-    detailImg2.style.backgroundImage = `url('${d.img2}')`;
+    const isPlaceholder = !d.hero;
+    detailHero.style.backgroundImage = isPlaceholder ? "none" : `url('${d.hero}')`;
+    detailHero.style.background = isPlaceholder ? "linear-gradient(135deg, #c0bbc4, #8a838d)" : "";
+    detailImg2.style.backgroundImage = isPlaceholder ? "none" : `url('${d.img2}')`;
+    detailImg2.style.display = isPlaceholder ? "none" : "";
     detailTitle.textContent = d.title;
     detailQuote.innerHTML = d.quote;
-    detailIntro.textContent = d.intro;
+    detailIntro.textContent = d.intro || "";
+    detailIntro.style.display = d.intro ? "" : "none";
     detailFeatures.innerHTML = d.features.map((f, i) => `
       <div class="feature">
         <div class="feature-icon">${featureIcons[i % featureIcons.length]}</div>
