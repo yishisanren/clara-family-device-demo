@@ -887,6 +887,155 @@
   .tab svg { width: 22px; height: 22px; }
   .tab span { font-size: 11px; font-weight: 500; }
 
+  /* ====== FULLSCREEN SUB-PAGES (board 4: pump / baby-monitor) ====== */
+  .page.subpage {
+    z-index: 30;
+    transform: translateX(100%);
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .page.subpage.open { transform: translateX(0); pointer-events: auto; }
+  .sub-nav {
+    position: absolute; left: 0; right: 0; top: 0;
+    height: calc(62px + 44px);
+    padding-top: 62px;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 5;
+  }
+  @media (max-width: 767px) {
+    .sub-nav { height: calc(env(safe-area-inset-top) + 44px); padding-top: env(safe-area-inset-top); }
+  }
+  .sub-nav h2 {
+    margin: 0; font-size: 17px; font-weight: 500;
+    color: rgba(36,15,27,.85);
+  }
+  .sub-nav .back, .sub-nav .gear {
+    position: absolute; top: calc(62px + 10px);
+    width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+    color: #240f1b; cursor: pointer;
+  }
+  @media (max-width: 767px) {
+    .sub-nav .back, .sub-nav .gear { top: calc(env(safe-area-inset-top) + 10px); }
+  }
+  .sub-nav .back { left: 17px; }
+  .sub-nav .gear { right: 16px; opacity: .85; }
+  .sub-nav .back svg, .sub-nav .gear svg { width: 22px; height: 22px; }
+
+  /* ----- Pump page ----- */
+  .pumppage { background: #fff; }
+  .pumppage .glow {
+    position: absolute; top: -310px; left: 50%; transform: translateX(-50%);
+    width: 530px; height: 530px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,221,225,.9) 0%, rgba(255,247,248,0) 62%);
+    pointer-events: none;
+  }
+  .pp-scroll {
+    position: absolute; inset: calc(62px + 44px) 0 0 0;
+    overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch;
+    padding: 0 16px 120px;
+  }
+  @media (max-width: 767px) {
+    .pp-scroll { inset: calc(env(safe-area-inset-top) + 44px) 0 0 0; }
+  }
+  /* device row */
+  .pp-devrow {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding: 0 0 18px;
+  }
+  .pp-devrow .dname { display: flex; align-items: center; gap: 4px; font-size: 18px; font-weight: 600; color: #240f1b; }
+  .pp-devrow .dname svg { width: 22px; height: 22px; }
+  .pp-conn {
+    display: inline-block; margin-top: 8px;
+    background: rgba(126,69,31,.04); color: #874113;
+    font-size: 12px; padding: 2px 8px; border-radius: 8px; letter-spacing: .24px;
+  }
+  .pp-bats { display: flex; gap: 8px; margin-top: 10px; }
+  .pp-batpill {
+    display: inline-flex; align-items: center; gap: 4px;
+    border: 1px solid #e9e7e8; border-radius: 32px; padding: 2px 8px 2px 4px;
+    font-size: 12px; background: #fff;
+  }
+  .pp-batpill.r { border-color: #e9eaec; color: #666; }
+  .pp-batpill.l { color: #770523; box-shadow: 0 4px 2px #f4f3f4; }
+  .pp-batpill .ic { width: 18px; height: 18px; display:flex;align-items:center;justify-content:center; }
+  .pp-batpill .ic svg { width: 16px; height: 16px; }
+  .pp-pumps { display: flex; gap: 6px; }
+  .pp-pumps .one { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .pp-pumps .one img { width: 56px; height: auto; display: block; }
+  .pp-pumps .one .lab { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #770523; }
+  .pp-pumps .one .lab .b { width: 14px; height: 9px; border:1px solid currentColor; border-radius:2px; position:relative; }
+  .pp-pumps .one .lab .b::after{content:'';position:absolute;right:-2.5px;top:2.5px;width:2px;height:3px;background:currentColor;border-radius:0 1px 1px 0;}
+  .pp-pumps .one .lab .b i{position:absolute;inset:1px;width:65%;background:currentColor;border-radius:1px;display:block;}
+
+  /* Last-pump card */
+  .pp-last {
+    position: relative; overflow: hidden;
+    background: #fff7f8; border: 1px solid #fff1f3; border-radius: 24px;
+    padding: 16px; margin-bottom: 12px;
+    color: #770523;
+  }
+  .pp-last::before {
+    content:''; position:absolute; left:50%; transform:translateX(-50%); top:-288px;
+    width:370px; height:370px; border-radius:50%;
+    background: radial-gradient(circle, rgba(255,221,225,.5), rgba(255,247,248,0) 60%);
+  }
+  .pp-last > * { position: relative; }
+  .pp-last .k { font-size: 12px; opacity: .5; margin-bottom: 8px; }
+  .pp-last .big { font-size: 40px; font-weight: 300; letter-spacing: -0.8px; line-height: 1; }
+  .pp-last hr { border: none; border-top: 1px solid rgba(119,5,35,.12); margin: 16px 0; }
+  .pp-last .row { display: flex; }
+  .pp-last .row .col { flex: 1; }
+  .pp-last .row .col .v { font-size: 16px; margin-top: 8px; }
+
+  /* Warm-up toggle row */
+  .pp-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    border: 1px solid #ebebeb; border-radius: 24px; padding: 8px 16px; margin-bottom: 12px;
+    background: #fff;
+  }
+  .pp-toggle .lbl { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #100028; }
+  .pp-toggle .info, .pp-last .info { width: 18px; height: 18px; opacity: .5; }
+  .pp-sw { width: 42px; height: 24px; border-radius: 24px; background: rgba(0,0,0,.08); position: relative; flex-shrink: 0; }
+  .pp-sw::after { content:''; position:absolute; left:2px; top:2px; width:20px; height:20px; border-radius:50%; background:#fff; transition:left .2s; }
+  .pp-sw.on { background: #770523; }
+  .pp-sw.on::after { left: 20px; }
+
+  /* Manual control card */
+  .pp-manual {
+    background: #fff; border: 1px solid #f1f1f1; border-radius: 24px; padding: 16px;
+  }
+  .pp-manual .hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .pp-manual .hd .ttl { display: flex; align-items: center; gap: 4px; font-size: 16px; color: #100028; }
+  .pp-manual .hd .va { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #240f1b; }
+  .pp-manual .hd .va svg { width: 7px; height: 12px; }
+  .pp-modes { display: flex; gap: 16px; }
+  .pp-mode { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .pp-mode .pill {
+    width: 100%; height: 40px; border-radius: 48px; border: 1px solid rgba(36,15,27,.12);
+    display: flex; align-items: center; justify-content: center; color: #240f1b;
+  }
+  .pp-mode .pill svg { width: 20px; height: 20px; }
+  .pp-mode .nm { font-size: 14px; color: #240f1b; }
+  .pp-mode.on .pill { background: #fff7f8; border-color: rgba(119,5,35,.6); color: #770523; }
+  .pp-mode.on .nm { color: #770523; }
+
+  .pp-start {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 0 16px 48px;
+    display: flex; justify-content: center;
+    background: linear-gradient(to top, #fff 60%, rgba(255,255,255,0));
+    padding-top: 24px;
+  }
+  @media (max-width: 767px) { .pp-start { padding-bottom: calc(24px + env(safe-area-inset-bottom)); } }
+  .pp-start button {
+    background: #770523; color: #fff; border: none;
+    height: 56px; padding: 0 24px; border-radius: 1000px;
+    font-size: 16px; font-weight: 500; letter-spacing: .32px;
+    display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+    box-shadow: 0 10px 5px #d3cfd1;
+  }
+  .pp-start button svg { width: 20px; height: 20px; }
+
   /* ====== DETAIL PAGE ====== */
   .detail-inner {
     background: var(--bg);
@@ -1570,6 +1719,98 @@
     </div>
   </div>
 
+  <!-- =============== PUMP PAGE (Figma 看板4 吸奶器 1:7794) =============== -->
+  <div class="page subpage pumppage" id="pumpPage">
+    <div class="glow"></div>
+    <div class="sub-nav">
+      <span class="back" data-close-sub>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+      </span>
+      <h2>Breast Pump</h2>
+      <span class="gear">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </span>
+    </div>
+
+    <div class="pp-scroll">
+      <!-- device row -->
+      <div class="pp-devrow">
+        <div>
+          <div class="dname">Kaka's M10
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <span class="pp-conn">Connecting...</span>
+          <div class="pp-bats">
+            <span class="pp-batpill l"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#770523" stroke-width="1.6"><rect x="2" y="9" width="12" height="6" rx="1.5"/><path d="M8 5v4M6 7h4" /></svg></span>58%</span>
+            <span class="pp-batpill r"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.6"><rect x="2" y="9" width="12" height="6" rx="1.5"/></svg></span>58%</span>
+          </div>
+        </div>
+        <div class="pp-pumps">
+          <div class="one">
+            <img src="pump-device.png" alt="">
+            <span class="lab">L <span class="b"><i></i></span></span>
+          </div>
+          <div class="one">
+            <img src="pump-device.png" alt="">
+            <span class="lab">R <span class="b"><i></i></span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Last pump card -->
+      <div class="pp-last">
+        <div class="k">Last Pump</div>
+        <div class="big">1h 45m ago</div>
+        <hr>
+        <div class="row">
+          <div class="col"><div class="k">Last Time</div><div class="v">09:35am</div></div>
+          <div class="col"><div class="k">Last Volume</div><div class="v">680ml</div></div>
+        </div>
+      </div>
+
+      <!-- Warm-Up toggle -->
+      <div class="pp-toggle">
+        <span class="lbl">Warm-Up Available
+          <svg class="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        </span>
+        <span class="pp-sw" id="warmupSw"></span>
+      </div>
+
+      <!-- Manual Control -->
+      <div class="pp-manual">
+        <div class="hd">
+          <span class="ttl">Manual Control
+            <svg class="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:18px;height:18px;opacity:.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          </span>
+          <span class="va">View all
+            <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1l6 6-6 6"/></svg>
+          </span>
+        </div>
+        <div class="pp-modes">
+          <div class="pp-mode">
+            <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21C7 17 4 13.5 4 9.5A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 8 3.5c0 4-3 7.5-8 11.5z"/></svg></span>
+            <span class="nm">Stimulate</span>
+          </div>
+          <div class="pp-mode">
+            <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c3 4 6 6.5 6 10a6 6 0 0 1-12 0c0-3.5 3-6 6-10z"/></svg></span>
+            <span class="nm">Expression</span>
+          </div>
+          <div class="pp-mode on">
+            <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></span>
+            <span class="nm">Mixed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pp-start">
+      <button>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        Start Pumping
+      </button>
+    </div>
+  </div>
+
   <!-- =============== DETAIL PAGE =============== -->
   <div class="page detail" id="detailPage">
     <button class="close-btn" id="closeBtn" aria-label="Close">
@@ -1859,8 +2100,22 @@
   // 默认进入空态页面
   showView("empty");
 
+  // ============ Fullscreen sub-pages (board 4: pump / baby-monitor) ============
+  function openSub(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.add("open");
+  }
+  function closeSub(el) { el.classList.remove("open"); }
+  document.querySelectorAll("[data-close-sub]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const page = btn.closest(".page.subpage");
+      if (page) closeSub(page);
+    });
+  });
+
   // ============ Phase 2: Breast Pump 3-step flow ============
   // state 0 有吸奶数据 x≤12h → tap → state 1 双边不同步韵律 → tap → state 2 结束吸奶 → tap → back to 0
+  // Tapping the top-right chevron / the Details button instead opens the pump page (board 4).
   (() => {
     const card = document.getElementById("pumpCard");
     if (!card) return;
@@ -1868,7 +2123,12 @@
     if (!steps.length) return;
     let step = 0;
     const render = () => steps.forEach((el, i) => { el.hidden = (i !== step); });
-    card.addEventListener("click", () => {
+    card.addEventListener("click", (e) => {
+      // chevron (states 0/2) or Details button (state 2) → open pump detail page
+      if (e.target.closest(".pump-chevron") || e.target.closest(".pump-done .btn")) {
+        openSub("pumpPage");
+        return;
+      }
       step = (step + 1) % steps.length;
       render();
     });
