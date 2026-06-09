@@ -924,21 +924,29 @@
     overflow: hidden;
   }
   .page.subpage.open { transform: translateX(0); pointer-events: auto; }
-  /* 整图还原页（看板4 吸奶器 / BBM）— 截图自带状态栏与导航栏，仅叠一个返回热区 */
+  /* 整图还原页（看板4 吸奶器 / BBM）— 截图自带状态栏与导航栏。
+     裁掉截图顶部 54px 状态栏（图片上移），导航栏紧贴真机安全区下方；
+     返回不另画按钮，只在设计稿原本的返回箭头位置叠一个透明热区 */
   .imgpage { background: #fff; }
-  .imgpage-scroll { position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-  .imgpage-shot { display: block; width: 100%; height: auto; }
-  .imgpage-back {
-    position: absolute; left: 8px; z-index: 5;
-    top: calc(env(safe-area-inset-top, 0px) + 54px);
-    width: 40px; height: 40px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  .imgpage-scroll {
+    position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    padding-top: env(safe-area-inset-top, 0px);
   }
-  .imgpage-back:active { background: rgba(0,0,0,0.06); }
-  .imgpage-back svg { width: 22px; height: 22px; }
-  /* 桌面预览：状态栏 62px，返回按钮往下对齐截图里的导航箭头 */
+  /* 上移 54px 把截图自带的系统状态栏裁掉，露出原导航栏作为顶部 */
+  .imgpage-shot { display: block; width: 100%; height: auto; margin-top: -54px; }
+  /* 透明返回热区：叠在截图导航栏左侧的原返回箭头上 */
+  .imgpage-back {
+    position: absolute; left: 0; z-index: 5;
+    top: calc(env(safe-area-inset-top, 0px));
+    width: 60px; height: 48px; cursor: pointer;
+    background: transparent;
+  }
+  .imgpage-back:active { background: rgba(0,0,0,0.05); }
+  .imgpage-back svg { display: none; }
+  /* 桌面预览：无安全区，导航栏热区紧贴顶部 */
   @media (min-width: 768px) {
-    .imgpage-back { top: 64px; }
+    .imgpage-scroll { padding-top: 0; }
+    .imgpage-back { top: 0; }
   }
   .sub-nav {
     position: absolute; left: 0; right: 0; top: 0;
@@ -1824,9 +1832,8 @@
     <div class="imgpage-scroll">
       <img class="imgpage-shot" src="board4-pump.png" alt="Breast Pump">
     </div>
-    <span class="imgpage-back" data-close-sub>
-      <svg viewBox="0 0 24 24" fill="none" stroke="#3d0b08" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
-    </span>
+    <!-- 透明返回热区，叠在截图原返回箭头上 -->
+    <span class="imgpage-back" data-close-sub aria-label="返回"></span>
   </div>
 
   <!-- 看板4 BBM / Baby Crib 页面 — 整图还原（只读，仅返回） -->
@@ -1834,9 +1841,8 @@
     <div class="imgpage-scroll">
       <img class="imgpage-shot" src="board4-monitor.png" alt="Baby Crib">
     </div>
-    <span class="imgpage-back" data-close-sub>
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
-    </span>
+    <!-- 透明返回热区，叠在截图原返回箭头上 -->
+    <span class="imgpage-back" data-close-sub aria-label="返回"></span>
   </div>
 
   <!-- =============== DETAIL PAGE =============== -->
