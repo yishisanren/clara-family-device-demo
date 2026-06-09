@@ -278,7 +278,7 @@
     display: flex; align-items: center; justify-content: center;
     overflow: hidden;
   }
-  .p2-dev .tile img { max-width: 72px; max-height: 72px; display: block; object-fit: contain; }
+  .p2-dev .tile img { width: 60px; height: 60px; display: block; object-fit: contain; }
   .p2-dev .txt { display: flex; flex-direction: column; gap: 11px; min-width: 0; }
   .p2-dev .name { font-size: 16px; font-weight: 600; letter-spacing: -0.1px; white-space: nowrap; }
   .p2-dev .sub { font-size: 12px; display: inline-flex; align-items: center; gap: 6px; }
@@ -299,7 +299,6 @@
   .p2-dev.toner    { background: #ffeff2; border: 1px solid #ffdde1; color: #770523; }
   .p2-dev.t31      { background-color: #def7e0; background-image: radial-gradient(120% 140% at 18% 120%, #aee0bd 0%, rgba(174,224,189,0) 60%); border: 1px solid #eceaef; color: #1a5140; }
   .p2-dev.t31 .tile { background: rgba(255,255,255,0.9); box-shadow: inset 0 0 0 1px #fff; }
-  .p2-dev.t31 .tile img { max-width: 84px; max-height: 84px; object-fit: contain; }
   .p2-dev.offline  { background: #fff; border: 1px solid #eceaef; color: #1b1821; }
   .p2-dev.offline .tile { background: #f8f7f9; }
   .p2-dev.offline .tile img { opacity: .5; }
@@ -586,8 +585,8 @@
   .card-sm-thumb.t31-thumb {
     background-color: rgba(255,255,255,0.9);
     box-shadow: inset 0 0 0 1px #fff;
-    background-size: contain;
-    background-position: center;
+    background-size: 72px 72px;
+    background-position: center center;
     background-repeat: no-repeat;
   }
 
