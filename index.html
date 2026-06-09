@@ -179,11 +179,11 @@
     -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
   }
 
-  /* ----- Small card (128px high in Figma) ----- */
+  /* ----- Small card (361x128 in Figma, padding 16, white-square 96x96, product 72x72) ----- */
   .card-sm {
     border-radius: 22px;
-    padding: 12px;
-    display: flex; align-items: center; gap: 12px;
+    padding: 16px;
+    display: flex; align-items: center; gap: 16px;
     height: 128px;
     cursor: pointer;
     transition: transform 0.18s ease;
@@ -192,11 +192,11 @@
   .card-sm.green { background: #d6ebd1; }
   .card-sm.pink { background: #fbe1e6; }
   .card-sm-thumb {
-    width: 104px; height: 104px;
-    border-radius: 18px;
+    width: 96px; height: 96px;
+    border-radius: 16px;
     background-color: #fff;
     background-repeat: no-repeat;
-    background-size: 80% auto;
+    background-size: 72px 72px;
     background-position: center;
     flex-shrink: 0;
     align-self: center;
