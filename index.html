@@ -129,6 +129,7 @@
   /* full-image card (Figma symbol rendered as image) */
   .p2-card {
     width: 100%;
+    flex-shrink: 0;
     display: block;
     border-radius: 22px;
     overflow: hidden;
@@ -239,13 +240,21 @@
     transition: filter .35s ease, transform .35s ease;
   }
   .bbm-frame.blur { filter: blur(13px) brightness(.92); transform: scale(1.18); }
-  /* purple gradient overlay for loading / fail */
+  /* dark overlay above the blurred frame — loading (per Figma rgba(21,8,43,.4) + blur) */
   .bbm-grad {
     position: absolute; inset: 0; opacity: 0;
-    background: linear-gradient(135deg,#3a2170 0%,#6a4bb0 55%,#8a6fce 100%);
+    background: rgba(21,8,43,0.42);
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
     transition: opacity .35s ease; pointer-events: none;
   }
-  .bbm-grad.on { opacity: .9; }
+  .bbm-grad.on { opacity: 1; }
+  /* dim overlay for fail state */
+  .bbm-dim {
+    position: absolute; inset: 0; opacity: 0;
+    background: linear-gradient(150deg, rgba(58,33,112,.82), rgba(94,70,150,.62));
+    transition: opacity .35s ease; pointer-events: none;
+  }
+  .bbm-dim.on { opacity: 1; }
 
   /* center play button (default / no-stream) */
   .bbm-center {
@@ -258,15 +267,28 @@
   }
   .bbm-center svg { width: 22px; height: 22px; margin-left: 3px; }
 
-  /* secure connection (loading) */
+  /* secure connection (loading) — geometry per Figma 拉流过程 (329×185 viewport) */
   .bbm-secure {
     position: absolute; inset: 0; z-index: 5; color: #fff;
-    padding: 16px; display: flex; flex-direction: column; justify-content: flex-end;
   }
-  .bbm-secure .ttl { font-size: 19px; font-weight: 700; line-height: 1.12; }
-  .bbm-secure .desc { font-size: 11px; color: rgba(255,255,255,.85); margin-top: 7px; }
-  .bbm-secure .spin { position: absolute; right: 14px; top: 14px; width: 30px; height: 30px; }
-  .bbm-secure .spin .ring { transform-origin: center; animation: bbmspin 1s linear infinite; }
+  /* title: left 18px, baseline near bottom; 18px SF Pro Medium, 2 lines */
+  .bbm-secure .ttl {
+    position: absolute; left: 5.5%; bottom: 22%;
+    font-size: 18px; font-weight: 510; line-height: 1.1; letter-spacing: -0.2px;
+  }
+  /* desc: full width, left-aligned, sits below title */
+  .bbm-secure .desc {
+    position: absolute; left: 5.5%; right: 5.5%; bottom: 9%;
+    font-size: 12px; line-height: 1.08; color: rgba(255,255,255,.62);
+    white-space: nowrap;
+  }
+  /* spinner: top-right of viewport */
+  .bbm-secure .spin {
+    position: absolute; right: 8%; top: 16%;
+    width: 30px; height: 30px;
+  }
+  .bbm-secure .spin svg { width: 100%; height: 100%; display: block; }
+  .bbm-secure .spin .ring { transform-origin: 50% 50%; animation: bbmspin 1s linear infinite; }
   @keyframes bbmspin { to { transform: rotate(360deg); } }
 
   /* sleep: tap to wake pill */
@@ -306,16 +328,6 @@
   /* header indicator swaps: chevron (browse) vs nothing while playing — keep chevron always */
   .bbm-hidden { display: none !important; }
 
-  /* transient hint toast inside preview */
-  .bbm-toast {
-    position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%);
-    background: rgba(20,12,38,.82); color: #fff; font-size: 11px;
-    padding: 6px 13px; border-radius: 16px; z-index: 20;
-    opacity: 0; transition: opacity .25s; pointer-events: none;
-    white-space: nowrap; max-width: 90%;
-  }
-  .bbm-toast.show { opacity: 1; }
-
   /* ----- Small card (361x128 in Figma, padding 16, white-square 96x96, product 72x72) ----- */
   .card-sm {
     border-radius: 22px;
@@ -328,6 +340,8 @@
   .card-sm:active { transform: scale(0.99); }
   .card-sm.green { background: #d6ebd1; }
   .card-sm.pink { background: #fbe1e6; }
+  .card-sm.yellow { background: #f6ead0; }
+  .card-sm.offline { background: #fff; box-shadow: 0 8px 22px -16px rgba(61,11,8,0.35); }
   .card-sm-thumb {
     width: 96px; height: 96px;
     border-radius: 16px;
@@ -822,8 +836,10 @@
           <div class="card-bbm-preview" id="bbmPreview">
             <!-- live / blurred video frame -->
             <div class="bbm-frame blur" id="bbmFrame"></div>
-            <!-- purple gradient overlay (loading / fail) -->
+            <!-- dark overlay for loading (blurred frame stays visible underneath) -->
             <div class="bbm-grad" id="bbmGrad"></div>
+            <!-- purple dim overlay for fail state -->
+            <div class="bbm-dim" id="bbmDim"></div>
 
             <!-- timestamp (shown when playing) -->
             <div class="card-bbm-timestamp bbm-hidden" id="bbmTime">2025-01-08 14:30:55</div>
@@ -833,13 +849,17 @@
               <svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
             </div>
 
-            <!-- secure connection (loading) -->
+            <!-- secure connection (loading) — per Figma 拉流过程 -->
             <div class="bbm-secure bbm-hidden" id="bbmSecure">
+              <!-- spinner: 3/4 rotating ring + centered shield-lock icon -->
               <div class="spin">
-                <svg class="ring" width="30" height="30" viewBox="0 0 30 30" fill="none">
-                  <circle cx="15" cy="15" r="11" stroke="rgba(255,255,255,.25)" stroke-width="2.5"/>
-                  <path d="M15 4a11 11 0 0 1 11 11" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
-                  <path d="M15 9.5l-2 2.2h4l-2 2.2" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <svg viewBox="0 0 40.7 41.4" fill="none">
+                  <path class="ring" d="M20 40.71C31.05 40.71 40 31.76 40 20.71C40 9.67 31.05 0.71 20 0.71"
+                        stroke="#fff" stroke-width="1.43" stroke-linecap="round"/>
+                  <path d="M24.47 15.04C23.21 14.42 21.67 14.05 20 14.05C18.33 14.05 16.79 14.42 15.53 15.04C14.91 15.35 14.6 15.51 14.3 15.99C14 16.47 14 16.94 14 17.88V20.21C14 23.99 17.03 26.1 18.78 27C19.27 27.26 19.52 27.38 20 27.38C20.48 27.38 20.73 27.26 21.22 27C22.97 26.1 26 23.99 26 20.21V17.88C26 16.94 26 16.47 25.7 15.99C25.4 15.51 25.09 15.35 24.47 15.04Z"
+                        stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M20 18.71V19.38M19.33 19.05A0.67 0.67 0 1 0 20.67 19.05A0.67 0.67 0 1 0 19.33 19.05Z"
+                        stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
               <div class="ttl">Secure<br>Connection</div>
@@ -876,8 +896,6 @@
               </div>
             </div>
 
-            <!-- transient hint -->
-            <div class="bbm-toast" id="bbmToast"></div>
           </div>
         </div>
 
@@ -1391,6 +1409,7 @@
     const preview= document.getElementById("bbmPreview");
     const frame  = document.getElementById("bbmFrame");
     const grad   = document.getElementById("bbmGrad");
+    const dim    = document.getElementById("bbmDim");
     const time   = document.getElementById("bbmTime");
     const center = document.getElementById("bbmCenter");
     const secure = document.getElementById("bbmSecure");
@@ -1398,14 +1417,13 @@
     const wake   = document.getElementById("bbmWake");
     const fail   = document.getElementById("bbmFail");
     const help   = document.getElementById("bbmHelp");
-    const toast  = document.getElementById("bbmToast");
     if (!card) return;
 
     const layers = [center, secure, controls, wake, fail];
     const hideLayers = () => layers.forEach(l => l.classList.add("bbm-hidden"));
 
     let state = "default";
-    let idleTimer = null, pullTimer = null, toastTimer = null;
+    let idleTimer = null, pullTimer = null;
     let forceFail = null; // when set, next pulling ends in this fail state
     const clearTimers = () => { clearTimeout(idleTimer); clearTimeout(pullTimer); idleTimer = pullTimer = null; };
     function syncFlow() {
@@ -1413,16 +1431,11 @@
       if (w) w.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.k === state));
     }
 
-    function hint(msg) {
-      toast.textContent = msg; toast.classList.add("show");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove("show"), 1500);
-    }
-
     function set(s) {
       clearTimers(); hideLayers();
       card.classList.remove("is-offline");
       grad.classList.remove("on");
+      dim.classList.remove("on");
       frame.classList.add("blur");
       time.classList.add("bbm-hidden");
       state = s; card.dataset.state = s;
@@ -1434,11 +1447,11 @@
           break;
 
         case "pulling":
-          grad.classList.add("on");
+          grad.classList.add("on");          // dark overlay over blurred frame
           secure.classList.remove("bbm-hidden");
           pullTimer = setTimeout(() => {
-            if (forceFail) { const f = forceFail; forceFail = null; set(f); hint("拉流失败"); }
-            else { set("control"); hint("连接成功，开始播放"); }
+            if (forceFail) { const f = forceFail; forceFail = null; set(f); }
+            else { set("control"); }
           }, 2400);
           break;
 
@@ -1459,7 +1472,7 @@
           break;
 
         case "fail1":
-          grad.classList.add("on");
+          dim.classList.add("on");
           fail.classList.remove("bbm-hidden");
           help.classList.add("bbm-hidden");
           break;
@@ -1475,35 +1488,34 @@
 
     function armIdle() {
       clearTimeout(idleTimer);
-      idleTimer = setTimeout(() => { if (state === "control") { set("playing"); hint("无操作 3 秒，自动清屏"); } }, 3000);
+      idleTimer = setTimeout(() => { if (state === "control") set("playing"); }, 3000);
     }
 
     // —— 单击监控画面区域 ——
     preview.addEventListener("click", () => {
-      if (state === "default" || state === "nostream") { hint("点击监控画面 → 拉流"); set("pulling"); }
-      else if (state === "control") { hint("清屏"); set("playing"); }
-      else if (state === "playing") { hint("唤出控制条"); set("control"); }
+      if (state === "default" || state === "nostream") set("pulling");
+      else if (state === "control") set("playing");
+      else if (state === "playing") set("control");
     });
 
     // —— 休眠：Tap to wake ——
-    wake.addEventListener("click", (e) => { e.stopPropagation(); hint("唤醒摄像头 → 拉流"); set("pulling"); });
+    wake.addEventListener("click", (e) => { e.stopPropagation(); set("pulling"); });
 
     // —— 控制条按钮 ——
-    document.getElementById("bbmPause").addEventListener("click", (e) => { e.stopPropagation(); hint("暂停 → 结束播放"); set("nostream"); });
-    document.getElementById("bbmFull").addEventListener("click", (e) => { e.stopPropagation(); hint("全屏"); armIdle(); });
+    document.getElementById("bbmPause").addEventListener("click", (e) => { e.stopPropagation(); set("nostream"); });
+    document.getElementById("bbmFull").addEventListener("click", (e) => { e.stopPropagation(); armIdle(); });
     document.getElementById("bbmMute").addEventListener("click", (e) => {
       e.stopPropagation();
       const ic = document.getElementById("bbmMuteIcon");
       const muted = ic.dataset.muted === "1";
       ic.dataset.muted = muted ? "0" : "1";
       ic.style.opacity = muted ? "1" : ".45";
-      hint(muted ? "取消静音" : "已静音");
       armIdle();
     });
 
     // —— 失败：重连 / 帮助 ——
-    document.getElementById("bbmReconnect").addEventListener("click", (e) => { e.stopPropagation(); hint("重新拉流"); set("pulling"); });
-    help.addEventListener("click", (e) => { e.stopPropagation(); hint("查看帮助"); });
+    document.getElementById("bbmReconnect").addEventListener("click", (e) => { e.stopPropagation(); set("pulling"); });
+    help.addEventListener("click", (e) => { e.stopPropagation(); });
 
     // —— 演示用：状态直达切换器 ——
     const flowDefs = [
@@ -1527,7 +1539,6 @@
     });
     document.getElementById("bbmForceFail").addEventListener("change", (e) => {
       forceFail = e.target.checked ? "fail1" : null;
-      hint(forceFail ? "已设置：下次拉流将失败" : "已取消失败模拟");
     });
 
     set("default");
